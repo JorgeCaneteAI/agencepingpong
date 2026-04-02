@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Templates>
+  <LabelTemplate FileName="/Users/jorgecanete/Documents/DYMO Label Software/Layouts/Recent Layouts/12 mm.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>12 mm</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/Dossier de classement paysage.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>Dossier de classement paysage</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/Expédition grand format.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>Expédition grand format</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/Adresse avec image.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>Adresse avec image</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/Adresse.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>Adresse</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/24 mm.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>D1 24mm</fr>
+    </Names>
+  </LabelTemplate>
+  <LabelTemplate FileName="~/Documents/DYMO Label Software/Layouts/Recent Layouts/19 mm.label" MarketRegion="All" IsBuiltIn="False">
+    <Names>
+      <fr>D1 19mm</fr>
+    </Names>
+  </LabelTemplate>
+</Templates>
