@@ -1,0 +1,11 @@
+# --- Auth basique ---
+AuthType Basic
+AuthName "Zone de staging - Acces restreint"
+AuthUserFile /home2/cajo3558/staging.agencepingpong.fr/.htpasswd
+Require valid-user
+
+# --- Bloquer indexation ---
+Header set X-Robots-Tag "noindex, nofollow, noarchive"
+
+# --- Sécurité ---
+Options -Indexes
