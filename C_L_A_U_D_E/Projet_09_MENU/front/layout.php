@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="base-url" content="<?= BASE_URL ?>">
+    <meta name="api-base-url" content="<?= BASE_URL ?>/api">
     <title><?= htmlspecialchars($pageTitle) ?> — MealCoach</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/app.css">
 </head>
