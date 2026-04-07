@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://agencepingpong.fr/sitemap.xml
+
+# Bloquer staging
+User-agent: *
+Disallow: /staging/
