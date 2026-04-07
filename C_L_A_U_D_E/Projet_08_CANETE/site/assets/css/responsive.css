@@ -1,0 +1,29 @@
+@media (max-width: 767.98px) {
+    /* Services */
+    .services__grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Realisations */
+    .realisations__grid {
+        grid-template-columns: 1fr;
+        gap: calc(var(--grid-gap) * 3);
+    }
+
+    /* Contact */
+    .contact__content {
+        padding: 0;
+    }
+
+    /* Footer */
+    .site-footer__inner {
+        flex-direction: column;
+        gap: 0.5em;
+        text-align: center;
+    }
+
+    /* Hero */
+    #hero {
+        height: 250vh;
+    }
+}
