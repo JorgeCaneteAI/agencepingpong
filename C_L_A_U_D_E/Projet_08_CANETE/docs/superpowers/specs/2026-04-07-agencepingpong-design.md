@@ -198,13 +198,9 @@ Header set X-Robots-Tag "noindex, nofollow, noarchive"
 
 ### Section 4 — Réalisations
 
-- **Contenu** : grille de projets avec visuel + titre + type + lien
-- **Projets** :
-  - Nacre Magazine (print — maquette, mise en page, colorimétrie)
-  - Florajet (print — catalogue client, PLV)
-  - YelloEvent (web — site vitrine traiteur/événementiel)
-  - Villa Plaisance (web — site maison d'hôtes)
-  - Verbruggen / aslideofbambi.dance (web — site artiste chorégraphe)
+- **Contenu** : grille de projets présentés par **métier/secteur** (pas de marques citées)
+- **Approche** : on parle de la profession, pas du client. Ex : "un éditeur de magazine", "un réseau de fleuristes", "un traiteur événementiel", "une maison d'hôtes", "une chorégraphe", "des coiffeurs", "des boulangeries"...
+- **Pour chaque projet** : visuel + secteur/métier + type de prestation + lien éventuel
 - **Animation** : hover effect sur les cartes, reveal au scroll
 - **Layout** : grille asymétrique (style éditorial), images de tailles variées
 
