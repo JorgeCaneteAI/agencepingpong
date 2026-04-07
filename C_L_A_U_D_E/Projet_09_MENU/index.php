@@ -53,11 +53,11 @@ if ($route === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 // ─── Routes API (JSON) ────────────────────────────────────────────────────────
 
 $apiRoutes = [
-    'api/suivi'       => __DIR__ . '/api/suivi.php',
-    'api/stock'       => __DIR__ . '/api/stock.php',
-    'api/courses'     => __DIR__ . '/api/courses.php',
-    'api/produits'    => __DIR__ . '/api/produits.php',
-    'api/compositeur' => __DIR__ . '/api/compositeur.php',
+    'api/suivi'       => __DIR__ . '/src/api/suivi.php',
+    'api/stock'       => __DIR__ . '/src/api/stock.php',
+    'api/courses'     => __DIR__ . '/src/api/courses.php',
+    'api/produits'    => __DIR__ . '/src/api/produits.php',
+    'api/compositeur' => __DIR__ . '/src/api/compositeur.php',
 ];
 
 if (array_key_exists($route, $apiRoutes)) {
