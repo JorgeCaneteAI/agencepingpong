@@ -1,0 +1,73 @@
+@font-face {
+    font-family: 'Space Grotesk';
+    src: url('../fonts/SpaceGrotesk-Variable.woff2') format('woff2');
+    font-weight: 300 700;
+    font-display: swap;
+}
+
+:root {
+    /* --- Couleurs --- */
+    --color-bg: #100904;
+    --color-text: #ffedd7;
+    --color-accent: #dc5000;
+    --color-muted: #6c5f51;
+    --color-dark: #382416;
+    --color-pure-white: #fff;
+    --color-pure-black: #000;
+
+    /* --- Responsive unit --- */
+    --inner-width: 100vw;
+    --vh: 1vh;
+    --screen-unit: min(
+        var(--inner-width) / (1920 - 60 * 2),
+        calc(var(--vh) * 100) / 1024 * 1.25
+    );
+
+    /* --- Typographie --- */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+
+    --h1: calc(140 * var(--screen-unit));
+    --h2: calc(68 * var(--screen-unit));
+    --h3: calc(45 * var(--screen-unit));
+    --h4: calc(32 * var(--screen-unit));
+    --h5: calc(20 * var(--screen-unit));
+    --body1: calc(38 * var(--screen-unit));
+    --body2: calc(24 * var(--screen-unit));
+    --body3: calc(18 * var(--screen-unit));
+    --btn-size: calc(16 * var(--screen-unit));
+
+    /* --- Grille --- */
+    --grid-columns: 16;
+    --site-padding-x: 3.125vw;
+    --grid-gap: calc(24 / 1800 * var(--inner-width));
+    --grid-column-width: calc(
+        (var(--inner-width) - 2 * var(--site-padding-x) - (var(--grid-columns) - 1) * var(--grid-gap))
+        / var(--grid-columns)
+    );
+
+    /* --- Espacement --- */
+    --site-padding-y: calc(var(--site-padding-x) * 2);
+    --section-gap: calc(var(--site-padding-x) * 4);
+
+    /* --- Transitions --- */
+    --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --duration-fast: 0.18s;
+    --duration-medium: 0.4s;
+}
+
+/* --- Mobile overrides --- */
+@media (max-width: 767.98px) {
+    :root {
+        --grid-columns: 4;
+        --site-padding-x: calc(16 / 375 * 100vw);
+
+        --h1: calc(64 * var(--screen-unit));
+        --h2: calc(38 * var(--screen-unit));
+        --h3: calc(28 * var(--screen-unit));
+        --h4: calc(20 * var(--screen-unit));
+        --body1: calc(20 * var(--screen-unit));
+        --body2: calc(16 * var(--screen-unit));
+        --body3: calc(14 * var(--screen-unit));
+    }
+}
