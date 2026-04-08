@@ -1,0 +1,282 @@
+/* ============================================
+   COMPONENTS — Agence Ping Pong
+   ============================================ */
+
+/* ---- BUTTONS ---- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: 0.875rem 2rem;
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 0;
+    cursor: pointer;
+    transition:
+        transform var(--duration-normal) var(--ease-bounce),
+        background-color var(--duration-fast) var(--ease-out),
+        color var(--duration-fast) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-out);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--color-coral);
+    outline-offset: 3px;
+}
+
+.btn--coral {
+    background-color: var(--color-coral);
+    color: var(--color-white);
+    box-shadow: 4px 4px 0 var(--color-navy);
+}
+
+.btn--coral:hover {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    transform: rotate(-2deg) scale(1.04);
+    box-shadow: 6px 6px 0 var(--color-coral);
+}
+
+.btn--coral:active {
+    transform: rotate(0deg) scale(0.98);
+    box-shadow: 2px 2px 0 var(--color-navy);
+}
+
+.btn--outline {
+    background-color: transparent;
+    color: var(--color-navy);
+    border: 2px solid var(--color-navy);
+    box-shadow: 4px 4px 0 var(--color-navy);
+}
+
+.btn--outline:hover {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    transform: rotate(-2deg) scale(1.04);
+}
+
+.btn--outline-white {
+    background-color: transparent;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+    box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn--outline-white:hover {
+    background-color: var(--color-white);
+    color: var(--color-navy);
+    transform: rotate(-2deg) scale(1.04);
+}
+
+.btn--turquoise {
+    background-color: var(--color-turquoise);
+    color: var(--color-white);
+    box-shadow: 4px 4px 0 var(--color-navy);
+}
+
+.btn--turquoise:hover {
+    background-color: var(--color-navy);
+    color: var(--color-turquoise);
+    transform: rotate(-2deg) scale(1.04);
+    box-shadow: 6px 6px 0 var(--color-turquoise);
+}
+
+/* ---- FORMS ---- */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.form-label {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-navy);
+}
+
+.section--dark .form-label {
+    color: var(--color-cream);
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 0;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-navy);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    color: var(--color-navy);
+    outline: none;
+    transition:
+        border-color var(--duration-fast) var(--ease-out),
+        color var(--duration-fast) var(--ease-out);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: rgba(27, 42, 74, 0.4);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-bottom-color: var(--color-coral);
+}
+
+.form-input:focus::placeholder,
+.form-textarea:focus::placeholder {
+    color: rgba(27, 42, 74, 0.25);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+/* Dark background variants */
+.section--dark .form-input,
+.section--dark .form-textarea {
+    border-bottom-color: rgba(255, 255, 255, 0.4);
+    color: var(--color-white);
+}
+
+.section--dark .form-input::placeholder,
+.section--dark .form-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.section--dark .form-input:focus,
+.section--dark .form-textarea:focus {
+    border-bottom-color: var(--color-coral);
+}
+
+/* Form error state */
+.form-input.is-error,
+.form-textarea.is-error {
+    border-bottom-color: var(--color-coral);
+}
+
+.form-error-message {
+    font-size: var(--text-small);
+    color: var(--color-coral);
+    margin-top: calc(var(--space-xs) * -0.5);
+}
+
+/* ---- CARDS ---- */
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    overflow: hidden;
+    transition:
+        transform var(--duration-normal) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-out);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 8px 8px 0 var(--color-navy);
+}
+
+.card__img-wrapper {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    position: relative;
+}
+
+.card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.card:hover .card__img {
+    transform: scale(1.06);
+}
+
+.card__body {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    flex: 1;
+}
+
+.card__type {
+    font-family: var(--font-display);
+    font-size: var(--text-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-coral);
+}
+
+.card__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--color-navy);
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.card:hover .card__title {
+    color: var(--color-coral);
+}
+
+.card__excerpt {
+    font-size: var(--text-small);
+    color: rgba(27, 42, 74, 0.7);
+    line-height: 1.6;
+    margin-top: var(--space-xs);
+}
+
+.card__footer {
+    padding: var(--space-sm) var(--space-md);
+    border-top: 1px solid rgba(27, 42, 74, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Card dark variant */
+.card--dark {
+    background-color: var(--color-navy);
+}
+
+.card--dark .card__title {
+    color: var(--color-white);
+}
+
+.card--dark:hover .card__title {
+    color: var(--color-coral);
+}
+
+.card--dark .card__excerpt {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.card--dark:hover {
+    box-shadow: 8px 8px 0 var(--color-coral);
+}
