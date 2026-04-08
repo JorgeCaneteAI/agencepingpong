@@ -38,6 +38,24 @@ if ($method === 'POST') {
         exit;
     }
 
+    if ($action === 'toggle') {
+        $produitId = (int)($body['produit_id'] ?? 0);
+        if (!$produitId) {
+            http_response_code(400);
+            echo json_encode(['error' => 'produit_id requis']);
+            exit;
+        }
+        $existing = fetchOne('SELECT id FROM stock WHERE produit_id = :pid', [':pid' => $produitId]);
+        if ($existing) {
+            query('DELETE FROM stock WHERE id = :id', [':id' => $existing['id']]);
+            echo json_encode(['ok' => true, 'en_stock' => false]);
+        } else {
+            insert('stock', ['produit_id' => $produitId, 'quantite' => 1, 'unite' => 'piece']);
+            echo json_encode(['ok' => true, 'en_stock' => true]);
+        }
+        exit;
+    }
+
     if ($action === 'set') {
         $id       = (int)   ($body['id']       ?? 0);
         $quantite = (float) ($body['quantite'] ?? 0);

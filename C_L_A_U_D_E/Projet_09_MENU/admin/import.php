@@ -83,12 +83,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
 
-                    // Nom de fichier .md sauvegardé
+                    // Nom de fichier .md sauvegardé (unique grâce au timestamp complet)
                     $filename = 'semaine'
-                        . ($numero ? $numero : date('YmdHis'))
+                        . ($numero ? $numero : 'X')
                         . '-' . ($saison ? mb_strtolower($saison) : 'import')
-                        . '-' . date('Ymd')
+                        . '-' . date('Ymd-His')
                         . '.md';
+
+                    // Supprimer l'ancienne semaine avec le même numéro si elle existe
+                    if ($numero) {
+                        $oldSemaine = fetchOne('SELECT id FROM semaines WHERE numero = :n', [':n' => $numero]);
+                        if ($oldSemaine) {
+                            $oldId = (int) $oldSemaine['id'];
+                            query('DELETE FROM liste_items WHERE liste_id IN (SELECT id FROM listes_courses WHERE semaine_id = :sid)', [':sid' => $oldId]);
+                            query('DELETE FROM listes_courses WHERE semaine_id = :sid', [':sid' => $oldId]);
+                            query('DELETE FROM menu_repas WHERE menu_jour_id IN (SELECT id FROM menu_jours WHERE semaine_id = :sid)', [':sid' => $oldId]);
+                            query('DELETE FROM menu_jours WHERE semaine_id = :sid', [':sid' => $oldId]);
+                            query('DELETE FROM batch_taches WHERE semaine_id = :sid', [':sid' => $oldId]);
+                            query('DELETE FROM semaines WHERE id = :sid', [':sid' => $oldId]);
+                        }
+                    }
 
                     $semaineId = (int) insert('semaines', [
                         'fichier'       => $filename,

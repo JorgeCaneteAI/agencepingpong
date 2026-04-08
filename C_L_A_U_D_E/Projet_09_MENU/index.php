@@ -7,6 +7,25 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/auth.php';
 
+// ─── Servir les fichiers statiques (PHP built-in server uniquement) ──────────
+if (php_sapi_name() === 'cli-server') {
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+    $staticPath = strtok($requestUri, '?');
+    if (str_starts_with($staticPath, BASE_URL)) {
+        $staticPath = substr($staticPath, strlen(BASE_URL));
+    }
+    $filePath = __DIR__ . $staticPath;
+    if (is_file($filePath) && !str_ends_with($filePath, '.php')) {
+        $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+        $types = ['css' => 'text/css', 'js' => 'application/javascript', 'png' => 'image/png', 'jpg' => 'image/jpeg', 'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'woff2' => 'font/woff2'];
+        if (isset($types[$ext])) {
+            header('Content-Type: ' . $types[$ext]);
+        }
+        readfile($filePath);
+        exit;
+    }
+}
+
 // ─── Résolution de la route ───────────────────────────────────────────────────
 
 $requestUri  = $_SERVER['REQUEST_URI'] ?? '/';
@@ -107,7 +126,7 @@ $frontRoutes = [
     'batch'        => __DIR__ . '/front/batch.php',
     'courses'      => __DIR__ . '/front/courses.php',
     'stock'        => __DIR__ . '/front/stock.php',
-    'compositeur'  => __DIR__ . '/front/compositeur.php',
+    'compositeur'  => __DIR__ . '/front/planificateur.php',
     'tableau'      => __DIR__ . '/front/tableau-reference.php',
     'suivi'        => __DIR__ . '/front/suivi.php',
 ];

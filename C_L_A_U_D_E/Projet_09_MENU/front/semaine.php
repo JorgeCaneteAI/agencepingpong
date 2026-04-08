@@ -1,165 +1,369 @@
 <?php
 /**
- * MealCoach — Vue semaine
- * Navigation par jours + accordéon des repas
+ * MealCoach V2 — Semaine (planning read-only)
+ * Vue semaine complete avec swipe horizontal par jour
  */
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../src/db.php';
+require_once __DIR__ . '/../src/helpers/meteo.php';
 require_once __DIR__ . '/../auth.php';
 requireLogin();
 
-// ── Semaine active ────────────────────────────────────────────────────────────
+// ── Date & jour ─────────────────────────────────────────────────
+$jourSemaine = (int) date('N') - 1; // 0=lundi … 6=dimanche
+$nomsJoursCourts = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+// ── Semaine active ──────────────────────────────────────────────
 $semaine = fetchOne(
     "SELECT * FROM semaines WHERE statut = 'active' ORDER BY date_debut DESC LIMIT 1"
 );
 
-// ── Jour sélectionné ──────────────────────────────────────────────────────────
-$todayJour    = (int) date('N') - 1; // 0=lundi … 6=dimanche
-$selectedJour = isset($_GET['jour']) ? max(0, min(6, (int) $_GET['jour'])) : $todayJour;
+// ── Dates des jours ─────────────────────────────────────────────
+$datesTabs = [];
+if ($semaine && !empty($semaine['date_debut'])) {
+    $debut = new DateTime($semaine['date_debut']);
+    for ($j = 0; $j <= 6; $j++) {
+        $d = clone $debut;
+        $d->modify('+' . $j . ' days');
+        $datesTabs[$j] = $d->format('d');
+    }
+}
 
-$nomsJoursCourts  = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-$nomsJoursComplets = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-
-// ── Repas du jour sélectionné ─────────────────────────────────────────────────
-$menuRepas = [];
+// ── Tous les repas de la semaine (pour le swiper) ───────────────
+$repasParJour = [];
 if ($semaine) {
-    $menuJour = fetchOne(
-        'SELECT * FROM menu_jours WHERE semaine_id = :sid AND jour = :jour',
-        [':sid' => $semaine['id'], ':jour' => $selectedJour]
+    $menuJours = fetchAll(
+        'SELECT * FROM menu_jours WHERE semaine_id = :sid ORDER BY jour',
+        [':sid' => $semaine['id']]
     );
-    if ($menuJour) {
-        $menuRepas = fetchAll(
-            'SELECT * FROM menu_repas WHERE menu_jour_id = :mjid
-             ORDER BY CASE type_repas
+    foreach ($menuJours as $mj) {
+        $repas = fetchAll(
+            'SELECT mr.*, r.instructions, r.duree_minutes
+             FROM menu_repas mr
+             LEFT JOIN recettes r ON r.id = mr.recette_id
+             WHERE mr.menu_jour_id = :mjid
+             ORDER BY CASE mr.type_repas
+                WHEN \'petit_dejeuner\' THEN 1
                 WHEN \'petit_dej\' THEN 1
                 WHEN \'dejeuner\'  THEN 2
+                WHEN \'gouter\'    THEN 3
                 WHEN \'encas\'     THEN 3
                 WHEN \'diner\'     THEN 4
                 WHEN \'dessert\'   THEN 5
                 ELSE 6 END',
-            [':mjid' => $menuJour['id']]
+            [':mjid' => $mj['id']]
         );
+        $repasParJour[(int) $mj['jour']] = $repas;
     }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-$repasLabels = [
-    'petit_dej' => ['emoji' => '🌅', 'label' => 'Petit déjeuner'],
-    'dejeuner'  => ['emoji' => '☀️', 'label' => 'Déjeuner'],
-    'encas'     => ['emoji' => '🍎', 'label' => 'En-cas 16h'],
-    'diner'     => ['emoji' => '🌙', 'label' => 'Dîner'],
-    'dessert'   => ['emoji' => '🍮', 'label' => 'Dessert'],
+// ── Météo semaine ───────────────────────────────────────────────
+$meteoSemaine = getMeteoSemaine();
+
+// ── Équivalences pour le swap inline ────────────────────────────
+$swapData = [];
+$catMap = [
+    'légumes' => 'legumes', 'legumes' => 'legumes',
+    'protéine' => 'proteine_repas', 'proteine' => 'proteine_repas',
+    'sucre lent' => 'sucre_lent',
+    'céréale' => 'sucre_lent', 'cereale' => 'sucre_lent',
+    'féculent' => 'sucre_lent', 'feculent' => 'sucre_lent',
+    'laitage' => 'laitage_pdj',
+    'mg' => 'matiere_grasse', 'matiere grasse' => 'matiere_grasse',
+    'fromage' => 'fromage_repas',
+    'fruit' => 'fruit',
+];
+$equivRows = fetchAll('SELECT e.id, e.categorie, e.description FROM equivalences e ORDER BY e.categorie, e.description');
+foreach ($equivRows as $r) {
+    $swapData[$r['categorie']][] = $r['description'];
+}
+$legRows = fetchAll('SELECT nom FROM produits WHERE categorie = :c AND exclu = 0 ORDER BY nom', [':c' => 'legumes']);
+$swapData['legumes'] = array_map(fn($r) => $r['nom'], $legRows);
+
+// ── Parser nom_plat (même logique que dashboard) ────────────────
+function parseMealName(string $nomPlat): array {
+    $titre = $nomPlat;
+    $composants = [];
+    $reste = '';
+
+    $pos1 = mb_strpos($nomPlat, '**');
+    if ($pos1 !== false) {
+        $pos2 = mb_strpos($nomPlat, '**', $pos1 + 2);
+        if ($pos2 !== false) {
+            $titre = trim(mb_substr($nomPlat, $pos1 + 2, $pos2 - $pos1 - 2));
+            $reste = ltrim(trim(mb_substr($nomPlat, $pos2 + 2)), " \t\n\r\0\x0B-–—");
+        } else {
+            $titre = str_replace('**', '', $nomPlat);
+            $parts = explode(' - ', $titre, 2);
+            $titre = trim($parts[0]);
+            $reste = $parts[1] ?? '';
+        }
+    } else {
+        $parts = explode(' - ', $nomPlat, 2);
+        $titre = trim($parts[0]);
+        $reste = $parts[1] ?? '';
+    }
+
+    if (!empty($reste)) {
+        $segments = preg_split('/ - /', $reste);
+        foreach ($segments as $seg) {
+            $seg = trim($seg);
+            if (empty($seg)) continue;
+            $colonPos = mb_strpos($seg, ' : ');
+            if ($colonPos !== false) {
+                $composants[] = ['cat' => trim(mb_substr($seg, 0, $colonPos)), 'val' => trim(mb_substr($seg, $colonPos + 3))];
+            } else {
+                $composants[] = ['cat' => '', 'val' => $seg];
+            }
+        }
+    }
+    return ['titre' => $titre, 'composants' => $composants];
+}
+function parseContenu(string $contenu): array {
+    $composants = [];
+    $segments = preg_split('/ - /', $contenu);
+    foreach ($segments as $seg) {
+        $seg = trim($seg);
+        if (empty($seg)) continue;
+        $colonPos = mb_strpos($seg, ' : ');
+        if ($colonPos !== false) {
+            $composants[] = ['cat' => trim(mb_substr($seg, 0, $colonPos)), 'val' => trim(mb_substr($seg, $colonPos + 3))];
+        } else {
+            $composants[] = ['cat' => '', 'val' => $seg];
+        }
+    }
+    return $composants;
+}
+function catEmoji(string $cat): string {
+    $cat = mb_strtolower(trim($cat));
+    $map = ['legumes' => '🥬', 'légumes' => '🥬', 'proteine' => '🍗', 'protéine' => '🍗',
+            'sucre lent' => '🍞', 'laitage' => '🥛', 'mg' => '🫒', 'cereale' => '🥣',
+            'céréale' => '🥣', 'fruit' => '🍎', 'fromage' => '🧀', 'boisson' => '☕'];
+    foreach ($map as $key => $emoji) { if (str_contains($cat, $key)) return $emoji; }
+    return '•';
+}
+
+// ── Helpers ─────────────────────────────────────────────────────
+$repasConfig = [
+    'petit_dejeuner' => ['emoji' => '🌅', 'label' => 'Petit-déjeuner', 'class' => 'petitdej'],
+    'petit_dej'      => ['emoji' => '🌅', 'label' => 'Petit-déjeuner', 'class' => 'petitdej'],
+    'dejeuner'       => ['emoji' => '☀️', 'label' => 'Déjeuner',       'class' => 'dejeuner'],
+    'gouter'         => ['emoji' => '🍫', 'label' => 'Goûter',         'class' => 'encas'],
+    'encas'          => ['emoji' => '🍎', 'label' => 'En-cas 16h',     'class' => 'encas'],
+    'diner'          => ['emoji' => '🌙', 'label' => 'Dîner',          'class' => 'diner'],
+    'dessert'        => ['emoji' => '🍵', 'label' => 'Soirée',         'class' => 'soiree'],
 ];
 
-// ── Rendu ─────────────────────────────────────────────────────────────────────
+// ── Rendu ───────────────────────────────────────────────────────
 $pageTitle = 'Semaine';
 $activeNav = 'semaine';
 ob_start();
 ?>
 
 <?php if (!$semaine): ?>
-    <h1 class="mb-16">Menu de la semaine</h1>
-    <div class="alert alert-warning">
-        Aucune semaine active.
-        <a href="<?= BASE_URL ?>/admin/import" style="color:var(--warning);font-weight:700;">
-            Importer un menu
-        </a>
+<!-- No active semaine -->
+<div class="page-header">
+    <h2>Menu de la semaine</h2>
+</div>
+<div class="page-inner">
+    <div class="alert-card alert-card--warning">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-text">
+            Aucune semaine active.
+            <a href="<?= BASE_URL ?>/admin/import" style="font-weight:700;text-decoration:underline;">Importer un menu</a>
+        </div>
     </div>
+</div>
 <?php else: ?>
 
-<h2 class="mb-16">
-    Semaine <?= (int) $semaine['numero'] ?>
-    <?php if (!empty($semaine['saison'])): ?>
-        <span class="badge badge-neutral"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
-    <?php endif; ?>
-    <?php if (!empty($semaine['date_debut']) && !empty($semaine['date_fin'])): ?>
-        <span class="text-muted text-sm">
-            <?= date('d/m', strtotime($semaine['date_debut'])) ?>
-            – <?= date('d/m', strtotime($semaine['date_fin'])) ?>
-        </span>
-    <?php endif; ?>
-</h2>
+<!-- Page Header -->
+<div class="page-header">
+    <h2>Semaine <?= (int) $semaine['numero'] ?></h2>
+    <div class="page-header-meta">
+        <?php if (!empty($semaine['date_debut']) && !empty($semaine['date_fin'])): ?>
+            <span class="page-header-badge">
+                <?= date('d/m', strtotime($semaine['date_debut'])) ?> – <?= date('d/m', strtotime($semaine['date_fin'])) ?>
+            </span>
+        <?php endif; ?>
+        <?php if (!empty($semaine['saison'])): ?>
+            <span class="page-header-badge"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
+        <?php endif; ?>
+    </div>
+</div>
 
-<!-- Tabs jours -->
-<div class="tabs" role="tablist">
+<!-- Day Tabs -->
+<div class="day-tabs" id="dayTabs">
     <?php for ($j = 0; $j <= 6; $j++): ?>
-        <a href="<?= BASE_URL ?>/semaine?jour=<?= $j ?>"
-           class="tab<?= $j === $selectedJour ? ' active' : '' ?>"
-           role="tab"
-           aria-selected="<?= $j === $selectedJour ? 'true' : 'false' ?>">
-            <?= $nomsJoursCourts[$j] ?>
-        </a>
+    <div class="day-tab<?= $j === $jourSemaine ? ' today' : '' ?>"
+         data-day="<?= $j ?>">
+        <div class="day-name"><?= $nomsJoursCourts[$j] ?></div>
+        <div class="day-num"><?= $datesTabs[$j] ?? ($j + 7) ?></div>
+    </div>
     <?php endfor; ?>
 </div>
 
-<h3 class="mb-16"><?= $nomsJoursComplets[$selectedJour] ?></h3>
-
-<?php if (empty($menuRepas)): ?>
-    <p class="text-muted text-sm">Aucun repas planifié pour ce jour.</p>
-<?php else: ?>
-    <div class="card" style="padding:0 16px;">
-        <?php foreach ($menuRepas as $repas):
-            $cfg = $repasLabels[$repas['type_repas']] ?? ['emoji' => '🍽️', 'label' => ucfirst($repas['type_repas'])];
+<!-- Day Swiper -->
+<div class="day-swiper" id="daySwiper" data-today="<?= $jourSemaine ?>">
+    <?php for ($j = 0; $j <= 6; $j++):
+        $jourRepas = $repasParJour[$j] ?? [];
+    ?>
+    <div class="day-panel" data-day="<?= $j ?>">
+        <?php
+        $dJ = isset($semaine['date_debut']) ? (clone new DateTime($semaine['date_debut']))->modify('+' . $j . ' days')->format('Y-m-d') : '';
+        $meteoJ = $meteoSemaine[$dJ] ?? null;
         ?>
-        <div class="accordion-item" data-repas-id="<?= (int) $repas['id'] ?>"
-             data-type="<?= htmlspecialchars($repas['type_repas']) ?>">
-            <div class="accordion-header">
-                <span><?= $cfg['emoji'] ?> <?= htmlspecialchars($cfg['label']) ?></span>
-            </div>
-            <div class="accordion-body">
-                <p style="color:var(--text);font-weight:600;margin-bottom:6px;">
-                    <?= htmlspecialchars($repas['nom_plat']) ?>
-                </p>
-                <?php if (!empty($repas['contenu'])): ?>
-                    <p style="margin-bottom:12px;"><?= nl2br(htmlspecialchars($repas['contenu'])) ?></p>
-                <?php endif; ?>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button type="button" class="btn btn-primary btn-sm"
-                            onclick="marquerRepas(<?= (int) $repas['id'] ?>, '<?= htmlspecialchars($repas['type_repas']) ?>', 'mange', this)">
-                        Mangé ✓
-                    </button>
-                    <button type="button" class="btn btn-outline btn-sm"
-                            onclick="marquerRepas(<?= (int) $repas['id'] ?>, '<?= htmlspecialchars($repas['type_repas']) ?>', 'saute', this)">
-                        Sauté
-                    </button>
-                </div>
-                <p class="repas-feedback text-sm mt-8" style="display:none;"></p>
-            </div>
+        <?php if ($meteoJ): ?>
+        <div class="meteo-day-chip">
+            <?= $meteoJ['icon'] ?> <?= $meteoJ['temp_min'] ?>° / <?= $meteoJ['temp_max'] ?>°C — <?= htmlspecialchars($meteoJ['label']) ?>
         </div>
-        <?php endforeach; ?>
+        <?php endif; ?>
+        <?php if (empty($jourRepas)): ?>
+            <div class="card" style="text-align:center;color:var(--text-muted);padding:30px;">
+                Aucun repas planifie
+            </div>
+        <?php else: ?>
+            <?php foreach ($jourRepas as $repas):
+                $type = $repas['type_repas'];
+                $cfg = $repasConfig[$type] ?? ['emoji' => '🍽️', 'label' => ucfirst($type), 'class' => 'dejeuner'];
+                $parsed = parseMealName($repas['nom_plat']);
+                if (empty($parsed['composants']) && !empty($repas['contenu'])) {
+                    $parsed['composants'] = parseContenu($repas['contenu']);
+                }
+                $hasDetail = !empty($parsed['composants']);
+            ?>
+            <div class="meal-card meal-card--<?= $cfg['class'] ?><?= $hasDetail ? ' meal-card--expandable' : '' ?>"
+                 <?php if ($hasDetail): ?>onclick="toggleMealDetail(this, event)"<?php endif; ?>>
+                <div class="meal-card-color"></div>
+                <div class="meal-card-header">
+                    <div class="meal-card-head">
+                        <div class="meal-card-type"><?= htmlspecialchars($cfg['label']) ?></div>
+                        <div class="meal-card-title"><?= htmlspecialchars($parsed['titre']) ?></div>
+                    </div>
+                </div>
+                <?php if ($hasDetail): ?>
+                <div class="meal-card-toggle">
+                    <span class="toggle-text">▾ Voir le detail</span>
+                </div>
+                <div class="meal-card-detail">
+                    <?php if (!empty($parsed['composants'])): ?>
+                    <div class="meal-components">
+                        <?php foreach ($parsed['composants'] as $ci => $comp):
+                            $canSwap = in_array($type, ['dejeuner', 'diner']) && !empty($comp['cat']);
+                            $swapCat = $canSwap ? ($catMap[mb_strtolower(trim($comp['cat']))] ?? '') : '';
+                        ?>
+                        <div class="meal-comp<?= $canSwap && $swapCat ? ' meal-comp--swappable' : '' ?>"
+                             <?php if ($canSwap && $swapCat): ?>
+                             onclick="event.stopPropagation(); openSwap(this, <?= (int) $repas['id'] ?>, <?= $ci ?>, '<?= htmlspecialchars($swapCat) ?>')"
+                             <?php endif; ?>>
+                            <div class="comp-body">
+                                <?php if (!empty($comp['cat'])): ?>
+                                <div class="comp-cat"><?= htmlspecialchars($comp['cat']) ?></div>
+                                <?php endif; ?>
+                                <div class="comp-val"><?= htmlspecialchars($comp['val']) ?></div>
+                            </div>
+                            <?php if ($canSwap && $swapCat): ?>
+                            <div class="comp-swap-icon">↔</div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!empty($repas['instructions'])): ?>
+                    <div class="meal-recipe">
+                        <div class="meal-recipe-header" onclick="event.stopPropagation(); this.parentElement.classList.toggle('open')">
+                            <span class="meal-recipe-icon">👨‍🍳</span>
+                            <span class="meal-recipe-label">Comment préparer</span>
+                            <?php if (!empty($repas['duree_minutes'])): ?>
+                            <span class="meal-recipe-time"><?= (int)$repas['duree_minutes'] ?> min</span>
+                            <?php endif; ?>
+                            <span class="meal-recipe-chevron">▾</span>
+                        </div>
+                        <div class="meal-recipe-body">
+                            <?php
+                            $steps = preg_split('/\.\s+/', trim($repas['instructions']));
+                            $steps = array_filter($steps, fn($s) => !empty(trim($s)));
+                            ?>
+                            <ol class="meal-recipe-steps">
+                                <?php foreach ($steps as $step): ?>
+                                <li><?= htmlspecialchars(trim($step)) ?>.</li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
+    <?php endfor; ?>
+</div>
 
 <?php endif; ?>
 
 <script>
-async function marquerRepas(repasId, typeRepas, statut, btn) {
-    const item    = btn.closest('.accordion-item');
-    const feedback = item ? item.querySelector('.repas-feedback') : null;
+var swapData = <?= json_encode($swapData, JSON_UNESCAPED_UNICODE) ?>;
+var activeSwapPanel = null;
 
-    try {
-        const res = await api('suivi', 'POST', {
-            action: 'maj_repas',
-            type_repas: typeRepas,
-            statut: statut,
-            date: new Date().toISOString().slice(0, 10)
-        });
-        if (feedback) {
-            feedback.style.display = 'block';
-            feedback.textContent = res.ok
-                ? (statut === 'mange' ? 'Repas marqué comme mangé ✓' : 'Repas sauté')
-                : (res.error || 'Erreur');
-            feedback.style.color = res.ok ? 'var(--success)' : 'var(--danger)';
-        }
-    } catch (err) {
-        if (feedback) {
-            feedback.style.display = 'block';
-            feedback.textContent = 'Erreur réseau';
-            feedback.style.color = 'var(--danger)';
-        }
+function openSwap(compEl, repasId, compIndex, swapCat) {
+    if (activeSwapPanel) {
+        activeSwapPanel.remove();
+        if (activeSwapPanel._parentComp === compEl) { activeSwapPanel = null; return; }
+        activeSwapPanel = null;
     }
+    var options = swapData[swapCat] || [];
+    if (options.length === 0) return;
+    var currentVal = compEl.querySelector('.comp-val').textContent.trim();
+    var panel = document.createElement('div');
+    panel.className = 'swap-panel';
+    panel._parentComp = compEl;
+    var title = document.createElement('div');
+    title.className = 'swap-panel-title';
+    title.textContent = 'Remplacer par :';
+    panel.appendChild(title);
+    options.forEach(function(opt) {
+        var div = document.createElement('div');
+        div.className = 'swap-option';
+        if (currentVal.toLowerCase().indexOf(opt.toLowerCase()) !== -1 ||
+            opt.toLowerCase().indexOf(currentVal.toLowerCase().split('(')[0].trim()) !== -1) {
+            div.classList.add('swap-option--current');
+        }
+        div.textContent = opt;
+        div.addEventListener('click', function(e) {
+            e.stopPropagation();
+            doSwap(repasId, compIndex, opt, compEl, panel);
+        });
+        panel.appendChild(div);
+    });
+    compEl.after(panel);
+    activeSwapPanel = panel;
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+async function doSwap(repasId, compIndex, newVal, compEl, panel) {
+    try {
+        var res = await api('compositeur', 'POST', {
+            action: 'swap_composant', repas_id: repasId,
+            comp_index: compIndex, new_value: newVal
+        });
+        if (res.ok) {
+            compEl.querySelector('.comp-val').textContent = newVal;
+            panel.remove();
+            activeSwapPanel = null;
+            compEl.style.background = 'color-mix(in srgb, var(--success) 15%, transparent)';
+            setTimeout(function() { compEl.style.background = ''; }, 1000);
+        } else { alert(res.error || 'Erreur'); }
+    } catch(e) { alert('Erreur reseau'); }
+}
+
+document.addEventListener('click', function(e) {
+    if (activeSwapPanel && !activeSwapPanel.contains(e.target) && !e.target.closest('.meal-comp--swappable')) {
+        activeSwapPanel.remove();
+        activeSwapPanel = null;
+    }
+});
 </script>
 
 <?php
