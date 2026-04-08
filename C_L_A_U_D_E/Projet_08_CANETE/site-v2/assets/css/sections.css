@@ -1,0 +1,329 @@
+/* ============================================
+   SECTIONS — Agence Ping Pong
+   Hero · Concept · Services · Réalisations · Contact · Footer
+   ============================================ */
+
+/* ============================================
+   HERO
+   ============================================ */
+
+.hero {
+    background-color: var(--color-cream);
+}
+
+.hero__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    gap: var(--space-lg);
+}
+
+.hero__text {
+    flex: 0 0 45%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.hero__title {
+    font-size: var(--text-hero);
+    color: var(--color-navy);
+    line-height: 0.9;
+}
+
+/* Pulsing scroll indicator */
+@keyframes hero-scroll-pulse {
+    0%   { opacity: 1;   transform: translateY(0); }
+    50%  { opacity: 0.4; transform: translateY(8px); }
+    100% { opacity: 1;   transform: translateY(0); }
+}
+
+.hero__scroll {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    animation: hero-scroll-pulse 2.4s var(--ease-out) infinite;
+    opacity: 0.6;
+}
+
+/* Portrait */
+.hero__portrait {
+    flex: 0 0 50%;
+    position: relative;
+    height: 600px;
+    max-height: 80vh;
+}
+
+.portrait-layer {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+}
+
+/* ============================================
+   CONCEPT
+   ============================================ */
+
+.concept {
+    background: linear-gradient(
+        to bottom,
+        var(--color-cream),
+        var(--color-turquoise-light)
+    );
+    position: relative;
+}
+
+/* Vertical net graphic */
+.concept__net {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    width: 20px;
+    height: 100%;
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+    pointer-events: none;
+}
+
+.concept__net--visible {
+    opacity: 1;
+}
+
+.concept__content {
+    text-align: center;
+    max-width: 700px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.concept__title {
+    font-size: var(--text-h1);
+}
+
+/* ============================================
+   SERVICES
+   ============================================ */
+
+.services {
+    background-color: var(--color-cream);
+}
+
+/* Scroll-reveal animation */
+@keyframes services-reveal {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.services__block {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+        opacity var(--duration-slow) var(--ease-out),
+        transform var(--duration-slow) var(--ease-out);
+}
+
+.services__block--revealed {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.services__block-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    width: 100%;
+}
+
+/* Alternate layout: icon on the right */
+.services__block--right .services__block-inner {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.services__icon {
+    flex: 0 0 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.services__icon img,
+.services__icon svg {
+    width: 120px;
+    height: 120px;
+}
+
+.services__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    max-width: 480px;
+}
+
+/* "Coup de" headline */
+.services__coup {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    color: var(--color-coral);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+
+/* ============================================
+   RÉALISATIONS
+   ============================================ */
+
+.realisations {
+    padding-block: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Faint table/grid background decoration */
+.realisations__table-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    opacity: 0.04;
+    pointer-events: none;
+}
+
+/* Carousel wrapper */
+.realisations__carousel {
+    overflow: hidden;
+}
+
+.realisations__track {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-md);
+    will-change: transform;
+}
+
+/* Cards in the carousel */
+.realisations__track .card {
+    flex: 0 0 350px;
+    min-width: 300px;
+}
+
+/* "Coming soon" placeholder card image */
+.card__img--placeholder {
+    background: linear-gradient(
+        135deg,
+        var(--color-turquoise-light) 0%,
+        var(--color-cream) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.card__img-soon {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    opacity: 0.2;
+    text-align: center;
+}
+
+/* ============================================
+   CONTACT
+   ============================================ */
+
+.contact {
+    background-color: var(--color-cream);
+}
+
+.contact__content {
+    max-width: 600px;
+    margin-inline: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.contact__game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Mobile tap button — hidden on desktop */
+.contact__tap-btn {
+    display: none;
+}
+
+/* Full-screen confetti canvas */
+.contact__confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: calc(var(--z-menu) + 10);
+}
+
+.contact__form-wrapper {
+    max-width: 500px;
+    margin-inline: auto;
+    text-align: left;
+    width: 100%;
+}
+
+.contact__submit {
+    align-self: flex-start;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+@keyframes footer-ball-roll {
+    from { left: -20px; }
+    to   { left: calc(100% + 20px); }
+}
+
+.site-footer {
+    text-align: center;
+    padding: var(--space-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.site-footer__ball {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: footer-ball-roll 8s linear infinite;
+    pointer-events: none;
+}
+
+.site-footer__copy {
+    font-size: var(--text-small);
+    opacity: 0.5;
+    position: relative; /* stay above the rolling ball */
+}
