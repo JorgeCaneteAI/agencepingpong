@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="#2ABFBF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Monitor outer frame -->
+  <rect x="4" y="8" width="56" height="38" rx="3"/>
+  <!-- Screen inner area -->
+  <rect x="8" y="12" width="48" height="28" rx="1" stroke-opacity="0.5"/>
+  <!-- Browser dots -->
+  <circle cx="13" cy="17" r="1.5" fill="#E63946" stroke="none"/>
+  <circle cx="19" cy="17" r="1.5" fill="#2ABFBF" stroke="none"/>
+  <circle cx="25" cy="17" r="1.5" fill="#8888A0" stroke="none"/>
+  <!-- Code brackets in screen -->
+  <path d="M22 30 L18 34 L22 38" stroke-width="2"/>
+  <path d="M42 30 L46 34 L42 38" stroke-width="2"/>
+  <line x1="35" y1="29" x2="29" y2="39" stroke-width="1.5"/>
+  <!-- Stand -->
+  <line x1="32" y1="46" x2="32" y2="54"/>
+  <!-- Base -->
+  <line x1="22" y1="54" x2="42" y2="54"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Shoulder ellipse -->
+  <ellipse cx="250" cy="370" rx="140" ry="40" fill="#1A1F3A"/>
+  <!-- Torso / T-shirt shape -->
+  <path d="M110 370 Q110 400, 120 560 L380 560 Q390 400, 390 370 Q320 340, 250 335 Q180 340, 110 370 Z" fill="#1A1F3A"/>
+</svg>

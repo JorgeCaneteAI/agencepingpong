@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Left eye -->
+  <ellipse cx="210" cy="218" rx="12" ry="8" fill="#1A1F3A"/>
+  <!-- Left eye highlight -->
+  <circle cx="215" cy="214" r="3" fill="#FFFFFF"/>
+  <!-- Right eye -->
+  <ellipse cx="290" cy="218" rx="12" ry="8" fill="#1A1F3A"/>
+  <!-- Right eye highlight -->
+  <circle cx="295" cy="214" r="3" fill="#FFFFFF"/>
+  <!-- Nose outline -->
+  <path d="M250 225 Q244 248, 238 258 Q248 265, 262 258 Q256 248, 250 225 Z" stroke="#D4A574" stroke-width="1.5" fill="none"/>
+  <!-- Smile -->
+  <path d="M225 280 Q250 298, 275 280" stroke="#1A1F3A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Head ellipse in skin tone -->
+  <ellipse cx="250" cy="230" rx="105" ry="120" fill="#D4A574"/>
+  <!-- Neck -->
+  <rect x="220" y="330" width="60" height="50" rx="10" fill="#D4A574"/>
+  <!-- Beard path in grey -->
+  <path d="M155 260 Q150 310, 160 330 Q180 360, 250 365 Q320 360, 340 330 Q350 310, 345 260 Q320 295, 250 300 Q180 295, 155 260 Z" fill="#888890" opacity="0.5"/>
+</svg>

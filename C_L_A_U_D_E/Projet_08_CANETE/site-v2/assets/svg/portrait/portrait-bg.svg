@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Turquoise ellipses at low opacity -->
+  <ellipse cx="250" cy="320" rx="220" ry="260" fill="#2ABFBF" opacity="0.10"/>
+  <ellipse cx="180" cy="200" rx="140" ry="180" fill="#2ABFBF" opacity="0.12"/>
+  <ellipse cx="370" cy="450" rx="100" ry="120" fill="#2ABFBF" opacity="0.15"/>
+  <ellipse cx="80" cy="520" rx="80" ry="70" fill="#2ABFBF" opacity="0.10"/>
+  <!-- Coral circle at low opacity -->
+  <circle cx="420" cy="120" r="90" fill="#E63946" opacity="0.08"/>
+</svg>

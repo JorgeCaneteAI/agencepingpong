@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 400">
+  <!-- Top horizontal bar -->
+  <rect x="0" y="0" width="20" height="4" fill="#1A1F3A" opacity="0.2"/>
+  <!-- Thin vertical lines (5 spaced) -->
+  <line x1="2" y1="4" x2="2" y2="400" stroke="#1A1F3A" stroke-width="0.8" opacity="0.1"/>
+  <line x1="6" y1="4" x2="6" y2="400" stroke="#1A1F3A" stroke-width="0.8" opacity="0.1"/>
+  <line x1="10" y1="4" x2="10" y2="400" stroke="#1A1F3A" stroke-width="0.8" opacity="0.1"/>
+  <line x1="14" y1="4" x2="14" y2="400" stroke="#1A1F3A" stroke-width="0.8" opacity="0.1"/>
+  <line x1="18" y1="4" x2="18" y2="400" stroke="#1A1F3A" stroke-width="0.8" opacity="0.1"/>
+  <!-- Central vertical bar -->
+  <rect x="9" y="0" width="2" height="400" fill="#1A1F3A" opacity="0.15"/>
+</svg>

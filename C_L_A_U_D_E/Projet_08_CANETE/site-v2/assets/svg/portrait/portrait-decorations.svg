@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Coral circle -->
+  <circle cx="60" cy="80" r="18" fill="#E63946" opacity="0.7"/>
+  <!-- Turquoise circle -->
+  <circle cx="440" cy="160" r="14" fill="#2ABFBF" opacity="0.6"/>
+  <!-- Rotated coral rect -->
+  <rect x="74" y="480" width="28" height="10" rx="3" fill="#E63946" opacity="0.5" transform="rotate(35, 88, 485)"/>
+  <!-- Turquoise star polygon -->
+  <polygon
+    points="450,460 452.9,468.6 462,468.6 454.5,474.2 457.4,482.8 450,477.2 442.6,482.8 445.5,474.2 438,468.6 447.1,468.6"
+    fill="#2ABFBF"
+    opacity="0.65"
+  />
+  <!-- Extra small coral rect (rotated other way) -->
+  <rect x="380" y="70" width="20" height="7" rx="2" fill="#E63946" opacity="0.4" transform="rotate(-25, 390, 73)"/>
+</svg>

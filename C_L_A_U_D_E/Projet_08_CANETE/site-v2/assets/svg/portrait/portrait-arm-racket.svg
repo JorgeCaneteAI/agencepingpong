@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Arm path in skin tone -->
+  <path d="M350 360 Q400 380, 420 440 Q430 480, 410 510" stroke="#D4A574" stroke-width="28" stroke-linecap="round" fill="none"/>
+  <!-- Racket head (coral ellipse) -->
+  <ellipse cx="415" cy="525" rx="38" ry="34" fill="#E63946" transform="rotate(-15, 415, 525)"/>
+  <!-- Racket handle (navy rect) -->
+  <rect x="408" y="558" width="10" height="28" rx="4" fill="#1A1F3A" transform="rotate(-15, 413, 572)"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Cap dome -->
+  <path d="M148 175 Q148 95, 250 90 Q352 95, 352 175 Q320 162, 250 160 Q180 162, 148 175 Z" fill="#1A1F3A"/>
+  <!-- Visor -->
+  <path d="M148 175 Q140 185, 145 195 Q170 185, 250 180 Q330 185, 355 195 Q360 185, 352 175 Q320 162, 250 160 Q180 162, 148 175 Z" fill="#1A1F3A"/>
+  <!-- Visor front edge / brim -->
+  <path d="M145 195 Q180 210, 250 207 Q320 210, 355 195" stroke="#333860" stroke-width="2" fill="none"/>
+</svg>

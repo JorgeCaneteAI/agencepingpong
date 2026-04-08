@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600">
+  <!-- Left frame -->
+  <rect x="172" y="206" width="56" height="38" rx="8" fill="none" stroke="#1A1F3A" stroke-width="2.5"/>
+  <!-- Right frame -->
+  <rect x="272" y="206" width="56" height="38" rx="8" fill="none" stroke="#1A1F3A" stroke-width="2.5"/>
+  <!-- Bridge connecting the two frames -->
+  <path d="M228 222 Q250 216, 272 222" fill="none" stroke="#1A1F3A" stroke-width="2"/>
+  <!-- Left temple -->
+  <line x1="172" y1="220" x2="148" y2="218" stroke="#1A1F3A" stroke-width="2" stroke-linecap="round"/>
+  <!-- Right temple -->
+  <line x1="328" y1="220" x2="352" y2="218" stroke="#1A1F3A" stroke-width="2" stroke-linecap="round"/>
+</svg>
