@@ -188,35 +188,38 @@ ob_start();
 </div>
 <?php else: ?>
 
+<?php
+    $moisFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    $debutDt = new DateTime($semaine['date_debut']);
+    $finDt   = new DateTime($semaine['date_fin']);
+    $moisDebut = $moisFr[(int)$debutDt->format('n') - 1];
+    $moisFin   = $moisFr[(int)$finDt->format('n') - 1];
+    if ($moisDebut === $moisFin) {
+        $headerDate = $debutDt->format('d') . ' – ' . $finDt->format('d') . ' ' . $moisFin;
+    } else {
+        $headerDate = $debutDt->format('d') . ' ' . $moisDebut . ' – ' . $finDt->format('d') . ' ' . $moisFin;
+    }
+?>
 <!-- Page Header with week navigation -->
 <div class="page-header">
     <div class="week-nav">
         <?php if ($prevSemaine): ?>
-        <a href="<?= BASE_URL ?>/semaine?sid=<?= $prevSemaine['id'] ?>" class="week-nav-btn">
-            ‹ S<?= (int)$prevSemaine['numero'] ?>
-        </a>
+        <a href="<?= BASE_URL ?>/semaine?sid=<?= $prevSemaine['id'] ?>" class="week-nav-btn">‹</a>
         <?php else: ?>
         <span class="week-nav-btn week-nav-btn--disabled">‹</span>
         <?php endif; ?>
 
         <div class="week-nav-center">
-            <h2>Semaine <?= (int) $semaine['numero'] ?></h2>
+            <h2><?= $headerDate ?></h2>
+            <?php if (!empty($semaine['saison'])): ?>
             <div class="page-header-meta">
-                <?php if (!empty($semaine['date_debut']) && !empty($semaine['date_fin'])): ?>
-                    <span class="page-header-badge">
-                        <?= date('d/m', strtotime($semaine['date_debut'])) ?> – <?= date('d/m', strtotime($semaine['date_fin'])) ?>
-                    </span>
-                <?php endif; ?>
-                <?php if (!empty($semaine['saison'])): ?>
-                    <span class="page-header-badge"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
-                <?php endif; ?>
+                <span class="page-header-badge"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
             </div>
+            <?php endif; ?>
         </div>
 
         <?php if ($nextSemaine): ?>
-        <a href="<?= BASE_URL ?>/semaine?sid=<?= $nextSemaine['id'] ?>" class="week-nav-btn">
-            S<?= (int)$nextSemaine['numero'] ?> ›
-        </a>
+        <a href="<?= BASE_URL ?>/semaine?sid=<?= $nextSemaine['id'] ?>" class="week-nav-btn">›</a>
         <?php else: ?>
         <span class="week-nav-btn week-nav-btn--disabled">›</span>
         <?php endif; ?>
