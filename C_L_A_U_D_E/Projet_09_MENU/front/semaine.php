@@ -14,10 +14,21 @@ requireLogin();
 $jourSemaine = (int) date('N') - 1; // 0=lundi … 6=dimanche
 $nomsJoursCourts = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
-// ── Semaine active ──────────────────────────────────────────────
-$semaine = fetchOne(
-    "SELECT * FROM semaines WHERE statut = 'active' ORDER BY date_debut DESC LIMIT 1"
-);
+// ── Semaine (par ID ou active) ──────────────────────────────────
+$reqSid = isset($_GET['sid']) ? (int)$_GET['sid'] : 0;
+if ($reqSid > 0) {
+    $semaine = fetchOne('SELECT * FROM semaines WHERE id = :id', [':id' => $reqSid]);
+} else {
+    $semaine = fetchOne("SELECT * FROM semaines WHERE statut = 'active' ORDER BY date_debut DESC LIMIT 1");
+}
+
+// ── Navigation prev/next ────────────────────────────────────────
+$prevSemaine = null;
+$nextSemaine = null;
+if ($semaine) {
+    $prevSemaine = fetchOne('SELECT id, numero, date_debut, date_fin FROM semaines WHERE date_debut < :d ORDER BY date_debut DESC LIMIT 1', [':d' => $semaine['date_debut']]);
+    $nextSemaine = fetchOne('SELECT id, numero, date_debut, date_fin FROM semaines WHERE date_debut > :d ORDER BY date_debut ASC LIMIT 1', [':d' => $semaine['date_debut']]);
+}
 
 // ── Dates des jours ─────────────────────────────────────────────
 $datesTabs = [];
@@ -177,17 +188,37 @@ ob_start();
 </div>
 <?php else: ?>
 
-<!-- Page Header -->
+<!-- Page Header with week navigation -->
 <div class="page-header">
-    <h2>Semaine <?= (int) $semaine['numero'] ?></h2>
-    <div class="page-header-meta">
-        <?php if (!empty($semaine['date_debut']) && !empty($semaine['date_fin'])): ?>
-            <span class="page-header-badge">
-                <?= date('d/m', strtotime($semaine['date_debut'])) ?> – <?= date('d/m', strtotime($semaine['date_fin'])) ?>
-            </span>
+    <div class="week-nav">
+        <?php if ($prevSemaine): ?>
+        <a href="<?= BASE_URL ?>/semaine?sid=<?= $prevSemaine['id'] ?>" class="week-nav-btn">
+            ‹ S<?= (int)$prevSemaine['numero'] ?>
+        </a>
+        <?php else: ?>
+        <span class="week-nav-btn week-nav-btn--disabled">‹</span>
         <?php endif; ?>
-        <?php if (!empty($semaine['saison'])): ?>
-            <span class="page-header-badge"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
+
+        <div class="week-nav-center">
+            <h2>Semaine <?= (int) $semaine['numero'] ?></h2>
+            <div class="page-header-meta">
+                <?php if (!empty($semaine['date_debut']) && !empty($semaine['date_fin'])): ?>
+                    <span class="page-header-badge">
+                        <?= date('d/m', strtotime($semaine['date_debut'])) ?> – <?= date('d/m', strtotime($semaine['date_fin'])) ?>
+                    </span>
+                <?php endif; ?>
+                <?php if (!empty($semaine['saison'])): ?>
+                    <span class="page-header-badge"><?= htmlspecialchars(ucfirst($semaine['saison'])) ?></span>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <?php if ($nextSemaine): ?>
+        <a href="<?= BASE_URL ?>/semaine?sid=<?= $nextSemaine['id'] ?>" class="week-nav-btn">
+            S<?= (int)$nextSemaine['numero'] ?> ›
+        </a>
+        <?php else: ?>
+        <span class="week-nav-btn week-nav-btn--disabled">›</span>
         <?php endif; ?>
     </div>
 </div>

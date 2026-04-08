@@ -116,6 +116,44 @@ h3 { font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
   border: var(--border);
 }
 
+/* ── Week Navigation ─────────────────────────────────────── */
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.week-nav-center {
+  text-align: center;
+  flex: 1;
+}
+.week-nav-center h2 {
+  margin-bottom: 4px;
+}
+.week-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.week-nav-btn:active {
+  transform: scale(0.95);
+}
+.week-nav-btn--disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
 /* ── 5. Page Inner (content padding) ──────────────────────── */
 .page-inner {
   padding: 0 16px;
