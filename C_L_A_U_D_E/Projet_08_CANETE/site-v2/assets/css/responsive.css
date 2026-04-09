@@ -12,6 +12,12 @@
         --ball-size: 18px;
     }
 
+    /* ---- NAV ---- */
+
+    .site-nav {
+        display: none;
+    }
+
     /* ---- HERO ---- */
 
     .hero__inner {

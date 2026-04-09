@@ -11,11 +11,97 @@
     background-color: var(--color-cream);
 }
 
+/* ---- Mac OS 8 Window (reusable) ---- */
+
+.mac-win {
+    border: 2px solid var(--color-navy);
+    box-shadow: 4px 4px 0 rgba(27, 42, 74, 0.25);
+    background-color: var(--color-cream);
+}
+
+.mac-win__titlebar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: linear-gradient(to bottom, #F5F0EB, #E0DBD5);
+    border-bottom: 2px solid var(--color-navy);
+    min-height: 26px;
+}
+
+/* Mac OS 8 traffic light buttons */
+.mac-win__btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 0;
+    border: 1.5px solid var(--color-navy);
+    flex-shrink: 0;
+}
+
+.mac-win__btn--close {
+    background-color: var(--color-coral);
+    border-color: #A8252F;
+}
+
+.mac-win__btn--minimize {
+    background-color: #F5C542;
+    border-color: #C49A20;
+}
+
+.mac-win__btn--zoom {
+    background-color: #2ABFBF;
+    border-color: #1A8F8F;
+}
+
+.mac-win__title {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+
+/* Horizontal stripes (like Mac OS 8 title bar) */
+.mac-win__stripes {
+    flex: 1;
+    height: 12px;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 1px,
+        rgba(27, 42, 74, 0.12) 1px,
+        rgba(27, 42, 74, 0.12) 2px
+    );
+    margin-left: 8px;
+    overflow: hidden;
+}
+
+.mac-win__body {
+    padding: var(--space-md);
+}
+
+/* ---- Hero Window ---- */
+
+.hero__window {
+    width: 100%;
+    margin-top: calc(var(--space-lg) + 40px); /* offset for fixed header */
+    margin-bottom: var(--space-lg);
+}
+
+.hero__window .mac-win__body {
+    padding: var(--space-sm) var(--space-xl);
+    /* Mac OS classic desktop dither pattern */
+    background-image: radial-gradient(circle, rgba(27, 42, 74, 0.08) 1px, transparent 1px);
+    background-size: 4px 4px;
+}
+
 .hero__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 100vh;
+    min-height: calc(100vh - 120px);
     gap: var(--space-lg);
 }
 
@@ -28,9 +114,91 @@
 }
 
 .hero__title {
-    font-size: var(--text-hero);
+    font-size: clamp(3rem, 7vw, 7rem);
     color: var(--color-navy);
     line-height: 0.9;
+}
+
+/* Hero icons — Mac OS 8 file/folder style */
+.hero__icons {
+    display: flex;
+    gap: var(--space-xl);
+    margin-top: var(--space-lg);
+}
+
+.hero__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 12px;
+    transition: transform var(--duration-normal) var(--ease-bounce);
+}
+
+.hero__icon:hover {
+    transform: translateY(-5px);
+}
+
+/* Mac OS 8 selection highlight on hover */
+.hero__icon:hover .hero__icon-label {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
+
+/* Bounce the icon on hover */
+.hero__icon:hover .hero__icon-svg {
+    animation: icon-bounce 0.5s var(--ease-bounce);
+}
+
+@keyframes icon-bounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.15); }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.hero__icon-svg {
+    width: 72px;
+    height: 72px;
+    filter: drop-shadow(2px 2px 0 rgba(27, 42, 74, 0.15));
+}
+
+.hero__icon-label {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    text-align: center;
+    white-space: nowrap;
+    padding: 3px 8px;
+    background-color: var(--color-white);
+    border: 1px solid rgba(27, 42, 74, 0.15);
+    transition:
+        background-color var(--duration-fast) ease,
+        color var(--duration-fast) ease,
+        border-color var(--duration-fast) ease;
+}
+
+.hero__icon:hover .hero__icon-label {
+    border-color: var(--color-navy);
+}
+
+/* Double-click cursor hint */
+.hero__icon::after {
+    content: 'Double-clic';
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.6rem;
+    color: var(--color-navy);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity var(--duration-normal) ease, transform var(--duration-normal) ease;
+}
+
+.hero__icon:hover::after {
+    opacity: 0.5;
+    transform: translateY(0);
 }
 
 /* Pulsing scroll indicator */
@@ -51,16 +219,29 @@
 
 /* Portrait */
 .hero__portrait {
-    flex: 0 0 50%;
-    position: relative;
-    height: 600px;
-    max-height: 80vh;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 35vw;
+    height: 80vh;
+    z-index: 10;
+    transform-origin: bottom right;
+}
+
+.hero__text {
+    z-index: 2;
 }
 
 .portrait-layer {
     position: absolute;
     inset: 0;
     will-change: transform;
+}
+
+.portrait-layer svg {
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
 }
 
 /* ============================================
@@ -77,33 +258,274 @@
 }
 
 /* Vertical net graphic */
-.concept__net {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-    width: 20px;
-    height: 100%;
-    opacity: 0;
-    transition: opacity var(--duration-slow) var(--ease-out);
+/* Net separator between sections */
+.net-separator {
+    width: 100%;
+    height: 60px;
+    color: var(--color-navy);
     pointer-events: none;
 }
 
-.concept__net--visible {
-    opacity: 1;
-}
-
-.concept__content {
-    text-align: center;
-    max-width: 700px;
-    margin-inline: auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
+.net-separator__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .concept__title {
     font-size: var(--text-h1);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.concept__cta {
+    display: inline-block;
+    margin-top: var(--space-lg);
+    align-self: center;
+    text-align: center;
+}
+
+/* ---- Concept App — VirusBarrier style ---- */
+
+.concept__app {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+}
+
+.concept__app-body {
+    display: flex;
+    min-height: 400px;
+}
+
+/* Left sidebar — rounded pill buttons */
+.concept__sidebar {
+    flex-shrink: 0;
+    width: 110px;
+    background: linear-gradient(to bottom, #E8E3DE, #D4CFC8);
+    border-right: 2px solid var(--color-navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-sm) 6px;
+    gap: 6px;
+}
+
+.concept__sidebar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    width: 100%;
+    background: linear-gradient(to bottom, #F5F0EB, #E0DBD5);
+    border: 2px solid rgba(27, 42, 74, 0.2);
+    border-top-color: #FFFFFF;
+    border-left-color: #FFFFFF;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all var(--duration-fast) ease;
+}
+
+.concept__sidebar-btn span {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.6rem;
+    color: var(--color-navy);
+    text-align: center;
+}
+
+.concept__sidebar-btn:hover {
+    background: linear-gradient(to bottom, #FFFFFF, #F0EBE5);
+    transform: scale(1.03);
+}
+
+.concept__sidebar-btn.is-active {
+    background: linear-gradient(to bottom, var(--color-coral), #C4252F);
+    border-color: #A8252F;
+    border-top-color: #FF6B76;
+    border-left-color: #FF6B76;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.concept__sidebar-btn.is-active span {
+    color: var(--color-white);
+}
+
+/* Right content — accordion log with scrollbar */
+.concept__log {
+    flex: 1;
+    background-color: var(--color-navy);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.concept__log-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 16px;
+    background: linear-gradient(to bottom, #2A3F6A, #1B2A4A);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.concept__log-header span {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.65rem;
+    color: rgba(245, 240, 235, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Scrollable area with Mac OS 8 scrollbar */
+.concept__log-scroll {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 420px;
+    /* Mac OS 8 scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #B8B0A6 #2A3F6A;
+}
+
+.concept__log-scroll::-webkit-scrollbar {
+    width: 16px;
+}
+
+.concept__log-scroll::-webkit-scrollbar-track {
+    background: #2A3F6A;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.concept__log-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #E8E3DE, #C4BFBA);
+    border: 2px solid #1B2A4A;
+    border-top-color: #FFFFFF;
+    border-left-color: #FFFFFF;
+}
+
+.concept__log-scroll::-webkit-scrollbar-button:start {
+    height: 16px;
+    background: linear-gradient(to bottom, #E8E3DE, #C4BFBA);
+    border: 2px solid #1B2A4A;
+    border-top-color: #FFFFFF;
+    border-left-color: #FFFFFF;
+}
+
+.concept__log-scroll::-webkit-scrollbar-button:end {
+    height: 16px;
+    background: linear-gradient(to bottom, #E8E3DE, #C4BFBA);
+    border: 2px solid #1B2A4A;
+    border-top-color: #FFFFFF;
+    border-left-color: #FFFFFF;
+}
+
+/* ---- Accordion entries ---- */
+.concept__accordion {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.concept__accordion-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.8rem;
+    color: var(--color-cream);
+    line-height: 1.5;
+    transition: background-color var(--duration-fast) ease;
+}
+
+.concept__accordion-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.concept__accordion-btn strong {
+    color: #FFFFFF;
+}
+
+.concept__accordion-btn em {
+    color: #2ABFBF;
+    font-style: normal;
+}
+
+.concept__accordion-arrow {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    color: rgba(245, 240, 235, 0.4);
+    transition: transform var(--duration-normal) ease;
+}
+
+.concept__accordion-btn.is-open .concept__accordion-arrow {
+    color: var(--color-coral);
+}
+
+/* Accordion body — hidden by default */
+.concept__accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 16px 0 38px;
+}
+
+.concept__accordion-body.is-visible {
+    max-height: 200px;
+    padding: 0 16px 14px 38px;
+}
+
+.concept__accordion-body p {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(245, 240, 235, 0.7);
+    line-height: 1.7;
+    border-left: 2px solid var(--color-coral);
+    padding-left: 12px;
+}
+
+/* Status dots */
+.concept__log-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.concept__log-icon--green {
+    background-color: #2ABFBF;
+    box-shadow: 0 0 6px rgba(42, 191, 191, 0.5);
+}
+
+.concept__log-icon--orange {
+    background-color: #F5C542;
+    box-shadow: 0 0 6px rgba(245, 197, 66, 0.5);
+}
+
+.concept__log-icon--coral {
+    background-color: var(--color-coral);
+    box-shadow: 0 0 6px rgba(230, 57, 70, 0.5);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.3); }
+}
+
+.concept__log-footer {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: linear-gradient(to bottom, #2A3F6A, #1B2A4A);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.65rem;
+    color: rgba(245, 240, 235, 0.5);
 }
 
 /* ============================================
@@ -112,6 +534,24 @@
 
 .services {
     background-color: var(--color-cream);
+}
+
+/* Services title — Mac OS 7 section label */
+.services__technique {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-white);
+    background-color: var(--color-coral);
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-top: 1px solid #FF6B76;
+    border-left: 1px solid #FF6B76;
+    border-right: 1px solid #A8252F;
+    border-bottom: 1px solid #A8252F;
+    margin-bottom: 0.25rem;
 }
 
 /* Scroll-reveal animation */
@@ -299,31 +739,196 @@
 }
 
 /* ============================================
+   PONG GAME
+   ============================================ */
+
+/* ---- Pong Section — Mac OS 8 Color ---- */
+
+.pong-section {
+    background-color: var(--color-navy);
+    padding: var(--space-xl) var(--container-padding);
+    text-align: center;
+}
+
+.pong-section__inner {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* Pong window overrides */
+.pong-window {
+    text-align: center;
+}
+
+/* Mac OS 8 menu bar inside pong window */
+.pong-menubar {
+    display: flex;
+    gap: 0;
+    padding: 2px 8px;
+    background: linear-gradient(to bottom, #F5F0EB, #E8E3DE);
+    border-bottom: 2px solid var(--color-navy);
+    height: 22px;
+    align-items: center;
+}
+
+.pong-menubar__item {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    padding: 0 10px;
+    cursor: default;
+    transition: background-color var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+
+.pong-menubar__item:hover {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
+
+/* Pong body — darker bg for contrast with the black canvas */
+.pong-body {
+    background-color: #E8E3DE;
+    padding: var(--space-md);
+}
+
+.pong-section__title {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 500;
+    color: var(--color-navy);
+    margin-bottom: var(--space-xs);
+}
+
+.pong-section__subtitle {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.75rem;
+    color: var(--color-navy);
+    opacity: 0.7;
+    margin-bottom: var(--space-md);
+}
+
+.pong-section__wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid var(--color-navy);
+    border-top: 2px solid rgba(27, 42, 74, 0.6);
+    border-left: 2px solid rgba(27, 42, 74, 0.6);
+    border-right: 2px solid rgba(27, 42, 74, 0.15);
+    border-bottom: 2px solid rgba(27, 42, 74, 0.15);
+}
+
+.pong-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.pong-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    background-color: rgba(27, 42, 74, 0.8);
+}
+
+.pong-overlay__result {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 500;
+    color: var(--color-white);
+}
+
+.pong-start-btn {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    background-color: var(--color-cream);
+    padding: 8px 28px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    border-top: 3px solid #FFFFFF;
+    border-left: 3px solid #FFFFFF;
+    border-right: 3px solid #B8B0A6;
+    border-bottom: 3px solid #B8B0A6;
+    box-shadow: 2px 2px 0 rgba(27, 42, 74, 0.2);
+    border-radius: 0;
+    transition: background-color var(--duration-fast) ease;
+}
+
+.pong-start-btn:hover {
+    background-color: #FFFFFF;
+}
+
+.pong-start-btn:active {
+    border-top: 3px solid #B8B0A6;
+    border-left: 3px solid #B8B0A6;
+    border-right: 3px solid #FFFFFF;
+    border-bottom: 3px solid #FFFFFF;
+    box-shadow: none;
+}
+
+.pong-section__controls {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.7rem;
+    color: var(--color-navy);
+    opacity: 0.6;
+    margin-top: var(--space-sm);
+}
+
+.pong-section__controls kbd {
+    display: inline-block;
+    background-color: var(--color-cream);
+    color: var(--color-navy);
+    padding: 2px 6px;
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.7rem;
+    border-top: 1.5px solid #FFFFFF;
+    border-left: 1.5px solid #FFFFFF;
+    border-right: 1.5px solid #B8B0A6;
+    border-bottom: 1.5px solid #B8B0A6;
+    border-radius: 0;
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 
-@keyframes footer-ball-roll {
-    from { left: -20px; }
-    to   { left: calc(100% + 20px); }
-}
-
+/* Footer — Mac OS 7 status bar */
 .site-footer {
     text-align: center;
-    padding: var(--space-lg);
+    padding: var(--space-sm) var(--space-lg);
     position: relative;
-    overflow: hidden;
+    background-color: var(--color-cream);
+    border-top: 2px solid var(--color-navy);
 }
 
 .site-footer__ball {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    animation: footer-ball-roll 8s linear infinite;
-    pointer-events: none;
+    display: none;
 }
 
 .site-footer__copy {
-    font-size: var(--text-small);
-    opacity: 0.5;
-    position: relative; /* stay above the rolling ball */
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-navy);
+    opacity: 0.6;
+    position: relative;
+    /* Mac OS 7 inset text look */
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    background-color: var(--color-cream);
+    border-top: 1px solid #C4BFBA;
+    border-left: 1px solid #C4BFBA;
+    border-right: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
 }

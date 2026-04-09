@@ -21,15 +21,7 @@
   /* ------------------------------------------------------------------ */
   var isMobile = window.innerWidth < 768;
 
-  if (!isMobile) {
-    contactSection.addEventListener('mouseenter', function () {
-      contactSection.style.cursor = 'url("assets/svg/game/racket-cursor.svg") 16 16, crosshair';
-    });
-
-    contactSection.addEventListener('mouseleave', function () {
-      contactSection.style.cursor = '';
-    });
-  }
+  // Cursor raquette removed
 
   /* ------------------------------------------------------------------ */
   /* 2. CONFETTI CREATION                                                 */

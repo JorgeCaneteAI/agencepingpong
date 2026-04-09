@@ -1,5 +1,17 @@
 </main><!-- /#site-content -->
 
+<!-- Phylactère portrait -->
+<div id="speech-bubble" class="speech-bubble" aria-hidden="true">
+    <p class="speech-bubble__text">Alors ?<br>On se fait une partie ?</p>
+</div>
+
+<!-- Bouton remonter -->
+<button id="back-to-top" class="back-to-top" aria-label="Remonter en haut de page">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"/>
+    </svg>
+</button>
+
 <footer class="site-footer">
     <div class="site-footer__inner o-container">
         <!-- Rolling ball decoration -->
@@ -26,6 +38,7 @@
 <script src="assets/js/portrait.js" defer></script>
 <script src="assets/js/animations.js" defer></script>
 <script src="assets/js/contact-interaction.js" defer></script>
+<script src="assets/js/pong.js" defer></script>
 <script src="assets/js/app.js" defer></script>
 
 </body>

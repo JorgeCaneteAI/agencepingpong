@@ -51,26 +51,31 @@ $csrfToken = generateCsrfToken();
         "inLanguage": "fr"
     }
     </script>
+    <!-- Force scroll to top on every page load (must be inline, before render) -->
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      // Clear any hash in URL so browser doesn't auto-scroll to an anchor
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname);
+      }
+      window.scrollTo(0, 0);
+    </script>
 </head>
 <body>
 
 <!-- Ball animation -->
 <div id="ball-container" class="ball-container" aria-hidden="true">
-    <svg id="ball-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
-        <defs>
-            <radialGradient id="ball-gradient" cx="38%" cy="35%" r="55%">
-                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
-                <stop offset="40%" stop-color="#f5e6c8"/>
-                <stop offset="100%" stop-color="#d4a853"/>
-            </radialGradient>
-            <filter id="ball-shadow" x="-30%" y="-30%" width="160%" height="160%">
-                <feDropShadow dx="3" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.25)"/>
-            </filter>
-        </defs>
-        <circle cx="40" cy="40" r="36" fill="url(#ball-gradient)" filter="url(#ball-shadow)"/>
-        <!-- Curved line detail (ping pong ball seam) -->
-        <path d="M 15 30 Q 40 18 65 30" fill="none" stroke="rgba(180,130,60,0.4)" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M 15 50 Q 40 62 65 50" fill="none" stroke="rgba(180,130,60,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+    <svg id="ball-svg" xmlns="http://www.w3.org/2000/svg" viewBox="200 280 200 200" width="80" height="80">
+        <!-- Ombre fond -->
+        <path d="M369.37,378.43c-1.67-8.58-4.95-16.65-9.73-24-4.79-7.35-10.85-13.61-18.03-18.59-7.43-5.17-15.72-8.74-24.64-10.62-8.92-1.88-17.95-1.96-26.83-.23-8.57,1.67-16.65,4.95-24,9.74-7.35,4.79-13.61,10.85-18.6,18.03-5.17,7.43-8.74,15.72-10.62,24.64-1.88,8.92-1.96,17.95-.23,26.83,1.67,8.58,4.95,16.65,9.74,24,4.79,7.35,10.85,13.61,18.02,18.6,7.43,5.17,15.72,8.74,24.64,10.62,8.92,1.88,17.95,1.96,26.83.23,8.58-1.67,16.65-4.95,24-9.74,7.35-4.79,13.61-10.85,18.59-18.03,5.17-7.43,8.74-15.72,10.62-24.64,1.88-8.92,1.96-17.95.23-26.83Z" fill="#30254b"/>
+        <!-- Balle -->
+        <path d="M357.8,402.87c-6.37,30.2-36.12,49.59-66.32,43.22-16.36-3.45-29.54-13.76-37.18-27.28-1.18-2.09-2.23-4.26-3.14-6.49-4.06-9.98-5.29-21.23-2.91-32.55,6.37-30.2,36.12-49.59,66.32-43.23,18.04,3.8,32.23,15.95,39.37,31.56,2,4.37,3.45,9.02,4.27,13.82,1.16,6.75,1.09,13.83-.41,20.93Z" fill="#e2e1e1"/>
+        <!-- Ombre sombre -->
+        <g mix-blend-mode="darken" opacity=".87">
+            <path d="M357.8,402.87c-6.37,30.2-36.12,49.59-66.32,43.22-16.36-3.45-29.54-13.76-37.18-27.28-1.18-2.09-2.23-4.26-3.14-6.49.37.19.73.38,1.09.56,19.94,10.43,42.94,18.26,64.74,12.66,14.06-3.62,26.59-12.9,34.14-25.31,3.42-5.62,5.8-11.85,7.08-18.3,1.16,6.75,1.09,13.83-.41,20.93Z" fill="#bdbdbc"/>
+        </g>
+        <!-- Reflet -->
+        <ellipse cx="290.77" cy="353.91" rx="17.1" ry="10.9" transform="translate(-95.54 107.82) rotate(-18.1)" fill="#fff"/>
     </svg>
 </div>
 
@@ -81,27 +86,102 @@ $csrfToken = generateCsrfToken();
 
 <!-- Site header -->
 <header id="site-header" class="site-header">
-    <a href="#hero" class="site-header__logo" aria-label="Agence Ping Pong — retour à l'accueil">
-        <!-- Two crossed rackets logo -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="48" height="48" aria-hidden="true">
-            <!-- Racket 1 (tilted left) -->
-            <g transform="rotate(-30, 30, 30)">
-                <ellipse cx="30" cy="20" rx="11" ry="13" fill="currentColor"/>
-                <rect x="28.5" y="32" width="3" height="16" rx="1.5" fill="currentColor"/>
-            </g>
-            <!-- Racket 2 (tilted right, slightly transparent) -->
-            <g transform="rotate(30, 30, 30)" opacity="0.6">
-                <ellipse cx="30" cy="20" rx="11" ry="13" fill="currentColor"/>
-                <rect x="28.5" y="32" width="3" height="16" rx="1.5" fill="currentColor"/>
-            </g>
-        </svg>
+  <div class="site-header__inner">
+    <a href="#hero" class="site-header__logo" id="site-logo" aria-label="Agence Ping Pong — retour à l'accueil">
+        <div class="site-header__logo-svg" aria-hidden="true">
+            <?php include __DIR__ . '/../assets/svg/logo/logofond.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logobois.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logodroite.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logogauche.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logoballe.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logoclair.svg'; ?>
+            <?php include __DIR__ . '/../assets/svg/logo/logoclairclair.svg'; ?>
+        </div>
     </a>
+
+    <!-- Nav desktop — Mac OS 8 menu bar -->
+    <nav class="site-nav" aria-label="Navigation principale">
+        <!-- Left: text menu items (Title Case) -->
+        <div class="site-nav__menus">
+            <a href="#concept" class="site-nav__link" data-section="concept">L'échange</a>
+            <a href="#services" class="site-nav__link" data-section="services">Les coups</a>
+            <a href="#realisations" class="site-nav__link" data-section="realisations">Les échanges</a>
+            <a href="#projets" class="site-nav__link" data-section="projets">Projets</a>
+            <a href="#contact" class="site-nav__link" data-section="contact">Contact</a>
+        </div>
+
+        <!-- Right: clock + icon buttons (Mac OS 8 style) -->
+        <div class="site-nav__icons">
+            <!-- Heure locale — Mac OS 8 style -->
+            <span class="site-nav__clock" id="nav-clock"></span>
+            <!-- Pong: mini écran avec jeu -->
+            <a href="#pong-game" class="site-nav__icon" data-section="pong-game" aria-label="Partie de Pong">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28">
+                    <rect x="4" y="3" width="24" height="18" rx="2" fill="#B8C4D8" stroke="#1B2A4A" stroke-width="1.5"/>
+                    <rect x="6" y="5" width="20" height="14" rx="1" fill="#1B2A4A"/>
+                    <rect x="8" y="8" width="1.5" height="6" fill="#FFFFFF"/>
+                    <rect x="22.5" y="9" width="1.5" height="6" fill="#FFFFFF"/>
+                    <circle cx="16" cy="12" r="1.2" fill="#E63946"/>
+                    <line x1="16" y1="5.5" x2="16" y2="18.5" stroke="#FFFFFF" stroke-width="0.5" stroke-dasharray="1.5 1.5"/>
+                    <rect x="12" y="21" width="8" height="2" rx="0.5" fill="#A0AABE" stroke="#1B2A4A" stroke-width="0.8"/>
+                    <rect x="9" y="23" width="14" height="2" rx="1" fill="#8892A4" stroke="#1B2A4A" stroke-width="0.8"/>
+                    <rect x="7" y="6" width="4" height="2" rx="0.5" fill="#FFFFFF" opacity="0.15"/>
+                </svg>
+                <!-- Mac OS 8 tooltip window -->
+                <div class="site-nav__tooltip">
+                    <div class="site-nav__tooltip-bar">
+                        <span class="site-nav__tooltip-close"></span>
+                        <span class="site-nav__tooltip-title">Pong.app</span>
+                    </div>
+                    <div class="site-nav__tooltip-body">Une petite partie ?</div>
+                </div>
+            </a>
+            <!-- Contact: enveloppe colorée -->
+            <a href="#contact" class="site-nav__icon site-nav__icon--contact" data-section="contact" aria-label="Contact">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28">
+                    <rect x="3" y="7" width="26" height="18" rx="1.5" fill="#F5F0EB" stroke="#1B2A4A" stroke-width="1.5"/>
+                    <polygon points="3,7 16,17 29,7" fill="#E8E3DE" stroke="#1B2A4A" stroke-width="1.2" stroke-linejoin="round"/>
+                    <circle cx="16" cy="19" r="3.5" fill="#E63946"/>
+                    <circle cx="16" cy="19" r="2" fill="#FF6B76"/>
+                    <circle cx="16" cy="19" r="0.8" fill="#E63946"/>
+                    <line x1="3" y1="25" x2="12" y2="17" stroke="#C4BFBA" stroke-width="0.8"/>
+                    <line x1="29" y1="25" x2="20" y2="17" stroke="#C4BFBA" stroke-width="0.8"/>
+                </svg>
+                <!-- Mac OS 8 tooltip window -->
+                <div class="site-nav__tooltip">
+                    <div class="site-nav__tooltip-bar">
+                        <span class="site-nav__tooltip-close"></span>
+                        <span class="site-nav__tooltip-title">Contact</span>
+                    </div>
+                    <div class="site-nav__tooltip-body">Envoie la balle !</div>
+                </div>
+            </a>
+            <!-- Remonter: flèche avec globe/terre -->
+            <a href="#hero" class="site-nav__icon site-nav__icon--top" id="nav-back-to-top" aria-label="Remonter en haut">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28">
+                    <circle cx="16" cy="16" r="12" fill="#2ABFBF" stroke="#1B2A4A" stroke-width="1.5"/>
+                    <circle cx="16" cy="16" r="9" fill="#5AD4D4"/>
+                    <polygon points="16,6 22,16 19,16 19,24 13,24 13,16 10,16" fill="#FFFFFF" stroke="#1B2A4A" stroke-width="1" stroke-linejoin="round"/>
+                    <ellipse cx="12" cy="11" rx="3" ry="2" fill="#FFFFFF" opacity="0.25"/>
+                </svg>
+                <!-- Mac OS 8 tooltip window -->
+                <div class="site-nav__tooltip">
+                    <div class="site-nav__tooltip-bar">
+                        <span class="site-nav__tooltip-close"></span>
+                        <span class="site-nav__tooltip-title">Remonter</span>
+                    </div>
+                    <div class="site-nav__tooltip-body">Retour au service</div>
+                </div>
+            </a>
+        </div>
+    </nav>
 
     <button class="burger-btn" id="burger-btn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="fullscreen-menu">
         <span class="burger-line"></span>
         <span class="burger-line"></span>
         <span class="burger-line"></span>
     </button>
+  </div>
 </header>
 
 <!-- Fullscreen navigation menu -->

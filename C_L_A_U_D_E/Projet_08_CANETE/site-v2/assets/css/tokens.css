@@ -24,6 +24,13 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'ChicagoFLF';
+    src: url('../fonts/ChicagoFLF.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+
 :root {
     --color-coral: #E63946;
     --color-turquoise: #2ABFBF;
@@ -50,7 +57,7 @@
     --container-max: 1200px;
     --container-padding: 2rem;
 
-    --z-ball: 50;
+    --z-ball: 9999;
     --z-header: 100;
     --z-menu: 200;
 

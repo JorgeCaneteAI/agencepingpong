@@ -11,11 +11,12 @@
 }
 
 .ball-container {
-    position: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: var(--z-ball);
     pointer-events: none;
     will-change: transform;
-    transform: translate(-100px, -100px);
 }
 
 .ball {
@@ -26,22 +27,23 @@
 /* ---- TRAJECTORY ---- */
 
 .trajectory-container {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: calc(var(--z-ball) - 1);
+    z-index: var(--z-ball);
     pointer-events: none;
     overflow: visible;
 }
 
 .trajectory-path {
     stroke: var(--trajectory-color);
+    stroke-width: 4;
     transition: stroke var(--duration-normal) var(--ease-out);
 }
 
-/* ---- HEADER ---- */
+/* ---- HEADER (Mac OS 7 — coloré) ---- */
 
 .site-header {
     position: fixed;
@@ -51,23 +53,279 @@
     z-index: var(--z-header);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: var(--space-sm) var(--container-padding);
+    justify-content: center;
     pointer-events: none;
+    background-color: var(--color-cream);
+    border-bottom: 2px solid var(--color-navy);
+    border-top: 2px solid #FFFFFF;
+    box-shadow: 0 2px 0 rgba(27, 42, 74, 0.15);
+    padding: 6px 0;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
 }
 
-.site-header > * {
+/* Inner wrapper to constrain content to site width */
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+}
+
+.site-header--scrolled {
+    background-color: rgba(245, 240, 235, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 0 rgba(27, 42, 74, 0.25);
+    padding: 4px 0;
     pointer-events: auto;
 }
 
-.site-header__logo svg {
-    transition:
-        transform var(--duration-normal) var(--ease-bounce);
-    display: block;
+.site-header__inner > * {
+    pointer-events: auto;
 }
 
-.site-header__logo:hover svg {
+.site-header__logo {
+    position: absolute;
+    left: var(--container-padding);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 99999;
+    pointer-events: auto;
+}
+
+.site-header__logo-svg {
+    position: relative;
+    width: clamp(60px, 8vw, 100px);
+    height: clamp(60px, 8vw, 100px);
+}
+
+.site-header__logo-svg svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform var(--duration-normal) var(--ease-bounce);
+}
+
+.site-header__logo:hover .site-header__logo-svg svg {
     transform: rotate(-10deg) scale(1.1);
+}
+
+/* ---- NAV DESKTOP (Mac OS 7 — menu bar) ---- */
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    height: 100%;
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-inline: var(--container-padding);
+}
+
+/* Left side: text menu items */
+.site-nav__menus {
+    display: flex;
+    align-items: center;
+    margin-left: clamp(30px, 5vw, 70px);
+    gap: 0;
+}
+
+/* Right side: icon buttons */
+.site-nav__icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Menu text links — Title Case, pixel font like Mac OS 7 */
+.site-nav__link {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    text-decoration: none;
+    text-transform: none; /* Title Case, not uppercase */
+    letter-spacing: 0.02em;
+    position: relative;
+    padding: 0.45rem 1rem;
+    border-radius: 0;
+    transition:
+        background-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+/* No underline — Mac OS 7 uses highlight */
+.site-nav__link::after {
+    display: none;
+}
+
+/* Mac OS 7 menu highlight: navy bg + white text */
+.site-nav__link:hover {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
+
+.site-nav__link--active {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+}
+
+/* ---- Icon buttons (right side) ---- */
+
+/* Mac OS 8 clock */
+.site-nav__clock {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    padding: 0 0.6rem;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.site-header--dark .site-nav__clock {
+    color: var(--color-cream);
+}
+
+/* Mac OS 8 status icons — no box, just the icon */
+.site-nav__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 0.3rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+    transition: transform var(--duration-fast) ease;
+}
+
+.site-nav__icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.site-nav__icon:hover {
+    transform: scale(1.15);
+}
+
+.site-nav__icon:active {
+    transform: scale(0.92);
+}
+
+/* ---- Mac OS 8 tooltip windows ---- */
+
+.site-nav__tooltip {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    min-width: 140px;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-navy);
+    box-shadow: 3px 3px 0 rgba(27, 42, 74, 0.3);
+    z-index: 100;
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.95);
+    transform-origin: top right;
+    transition:
+        opacity 0.25s var(--ease-out),
+        visibility 0.25s var(--ease-out),
+        transform 0.25s var(--ease-bounce);
+    pointer-events: none;
+}
+
+/* Show on hover */
+.site-nav__icon:hover .site-nav__tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Mac OS 8 title bar */
+.site-nav__tooltip-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: linear-gradient(to bottom, #E8E3DE, #D4CFC8);
+    border-bottom: 2px solid var(--color-navy);
+}
+
+.site-nav__tooltip-close {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--color-navy);
+    flex-shrink: 0;
+}
+
+.site-nav__tooltip-title {
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    white-space: nowrap;
+}
+
+/* Tooltip body */
+.site-nav__tooltip-body {
+    padding: 8px 10px;
+    font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+    font-size: 0.7rem;
+    color: var(--color-navy);
+    white-space: nowrap;
+    background-color: var(--color-white);
+}
+
+/* Back to top icon — hidden until scrolled */
+.site-nav__icon--top {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    transition:
+        opacity 0.3s var(--ease-out),
+        visibility 0.3s var(--ease-out),
+        transform 0.3s var(--ease-out),
+        background-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+.site-nav__icon--top--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Dark header variant — Mac OS 7 navy */
+.site-header--dark {
+    background-color: var(--color-navy);
+    border-bottom-color: #0D1525;
+    border-top-color: #3A5080;
+}
+
+.site-header--dark .site-nav__link {
+    color: var(--color-cream);
+}
+
+.site-header--dark .site-nav__link:hover {
+    background-color: var(--color-coral);
+    color: var(--color-white);
+}
+
+.site-header--dark .site-nav__icon {
+    /* Icons keep their colors on dark bg */
+}
+
+.site-header--dark .site-nav__link--cta {
+    color: var(--color-white);
 }
 
 /* ---- BURGER ---- */

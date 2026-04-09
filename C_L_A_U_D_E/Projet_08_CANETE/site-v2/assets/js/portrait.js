@@ -148,6 +148,65 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* 5. SCROLL SHRINK — portrait gets smaller as you scroll down         */
+  /* ------------------------------------------------------------------ */
+  function setupScrollShrink() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.fromTo(container, {
+      scale: 1
+    }, {
+      scale: 0.4,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1
+      }
+    });
+  }
+
+  if (!prefersReducedMotion) {
+    setupScrollShrink();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* 6. SPEECH BUBBLE — appears near contact section                     */
+  /* ------------------------------------------------------------------ */
+  var speechBubble = document.getElementById('speech-bubble');
+  var portraitWrapper = document.querySelector('.hero__portrait');
+
+  function positionSpeechBubble() {
+    if (!speechBubble || !portraitWrapper) return;
+    var rect = portraitWrapper.getBoundingClientRect();
+    var bubbleWidth = 220;
+    // Center bubble on the left edge of the portrait
+    speechBubble.style.left = (rect.left - bubbleWidth / 2) + 'px';
+    speechBubble.style.bottom = (window.innerHeight - rect.top + 16) + 'px';
+  }
+
+  if (speechBubble && typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.create({
+      trigger: '#contact',
+      start: 'top 80%',
+      onEnter: function () {
+        positionSpeechBubble();
+        speechBubble.classList.add('speech-bubble--visible');
+      },
+      onLeaveBack: function () {
+        speechBubble.classList.remove('speech-bubble--visible');
+      },
+      onUpdate: function () {
+        if (speechBubble.classList.contains('speech-bubble--visible')) {
+          positionSpeechBubble();
+        }
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Cleanup on resize crossing breakpoint                               */
   /* ------------------------------------------------------------------ */
   window.addEventListener('resize', function () {

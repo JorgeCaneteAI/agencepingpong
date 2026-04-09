@@ -7,6 +7,24 @@
   'use strict';
 
   /* ------------------------------------------------------------------ */
+  /* 0. MAC OS 8 CLOCK                                                    */
+  /* ------------------------------------------------------------------ */
+  var navClock = document.getElementById('nav-clock');
+  if (navClock) {
+    function updateClock() {
+      var now = new Date();
+      var h = now.getHours();
+      var m = now.getMinutes();
+      var suffix = h >= 12 ? 'PM' : 'AM';
+      var h12 = h % 12 || 12;
+      var mStr = m < 10 ? '0' + m : m;
+      navClock.textContent = h12 + ':' + mStr + ' ' + suffix;
+    }
+    updateClock();
+    setInterval(updateClock, 10000);
+  }
+
+  /* ------------------------------------------------------------------ */
   /* 8. DEBOUNCE UTILITY                                                  */
   /* ------------------------------------------------------------------ */
   function debounce(fn, wait) {
@@ -43,6 +61,21 @@
 
   // Expose globally so other modules can use it
   window.__lenis = lenis;
+
+  /* ------------------------------------------------------------------ */
+  /* 1b. HEADER SCROLL EFFECT                                              */
+  /* ------------------------------------------------------------------ */
+  var headerEl = document.getElementById('site-header');
+  var scrollThreshold = 50;
+
+  lenis.on('scroll', function (e) {
+    if (!headerEl) return;
+    if (e.scroll > scrollThreshold) {
+      headerEl.classList.add('site-header--scrolled');
+    } else {
+      headerEl.classList.remove('site-header--scrolled');
+    }
+  });
 
   /* ------------------------------------------------------------------ */
   /* 2. MENU BURGER                                                       */
@@ -101,6 +134,51 @@
       setTimeout(function () {
         lenis.scrollTo(target, { duration: 1.2 });
       }, 400);
+    });
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* 3b. DESKTOP NAV LINKS — smooth scroll + active state                */
+  /* ------------------------------------------------------------------ */
+  var navLinks = document.querySelectorAll('.site-nav__link');
+
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = link.getAttribute('href');
+      lenis.scrollTo(target, { duration: 1.2 });
+    });
+  });
+
+  // Hero icons smooth scroll
+  var heroIcons = document.querySelectorAll('.hero__icon');
+  heroIcons.forEach(function (icon) {
+    icon.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = icon.getAttribute('href');
+      lenis.scrollTo(target, { duration: 1.2 });
+    });
+  });
+
+  // Active state tracking via ScrollTrigger
+  var navSections = document.querySelectorAll('[id]');
+  navSections.forEach(function (section) {
+    var sectionId = section.getAttribute('id');
+    var matchingLink = document.querySelector('.site-nav__link[data-section="' + sectionId + '"]');
+    if (!matchingLink) return;
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top center',
+      end: 'bottom center',
+      onEnter: function () {
+        navLinks.forEach(function (l) { l.classList.remove('site-nav__link--active'); });
+        matchingLink.classList.add('site-nav__link--active');
+      },
+      onEnterBack: function () {
+        navLinks.forEach(function (l) { l.classList.remove('site-nav__link--active'); });
+        matchingLink.classList.add('site-nav__link--active');
+      }
     });
   });
 
@@ -212,7 +290,32 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* 7. VH FIX — set --vh CSS custom property                            */
+  /* 7. BACK TO TOP BUTTON                                                */
+  /* ------------------------------------------------------------------ */
+  var backToTopBtn = document.getElementById('back-to-top');
+  var navBackToTop = document.getElementById('nav-back-to-top');
+
+  function scrollToTop(e) {
+    e.preventDefault();
+    lenis.scrollTo(0, { duration: 0.8 });
+  }
+
+  // Show/hide both back-to-top elements
+  lenis.on('scroll', function (e) {
+    if (e.scroll > 600) {
+      if (backToTopBtn) backToTopBtn.classList.add('back-to-top--visible');
+      if (navBackToTop) navBackToTop.classList.add('site-nav__icon--top--visible');
+    } else {
+      if (backToTopBtn) backToTopBtn.classList.remove('back-to-top--visible');
+      if (navBackToTop) navBackToTop.classList.remove('site-nav__icon--top--visible');
+    }
+  });
+
+  if (backToTopBtn) backToTopBtn.addEventListener('click', scrollToTop);
+  if (navBackToTop) navBackToTop.addEventListener('click', scrollToTop);
+
+  /* ------------------------------------------------------------------ */
+  /* 8. VH FIX — set --vh CSS custom property                            */
   /* ------------------------------------------------------------------ */
   function setVh() {
     var vh = window.innerHeight * 0.01;
@@ -221,5 +324,30 @@
 
   setVh();
   window.addEventListener('resize', debounce(setVh, 150));
+
+  /* ------------------------------------------------------------------ */
+  /* 9. CONCEPT ACCORDION                                                 */
+  /* ------------------------------------------------------------------ */
+  var accordionBtns = document.querySelectorAll('.concept__accordion-btn');
+  accordionBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var body = btn.nextElementSibling;
+      var isOpen = btn.classList.contains('is-open');
+
+      // Close all
+      accordionBtns.forEach(function (b) {
+        b.classList.remove('is-open');
+        b.querySelector('.concept__accordion-arrow').textContent = '▶';
+        b.nextElementSibling.classList.remove('is-visible');
+      });
+
+      // Toggle clicked
+      if (!isOpen) {
+        btn.classList.add('is-open');
+        btn.querySelector('.concept__accordion-arrow').textContent = '▼';
+        body.classList.add('is-visible');
+      }
+    });
+  });
 
 })();
