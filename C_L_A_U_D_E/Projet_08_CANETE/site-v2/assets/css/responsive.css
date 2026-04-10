@@ -51,20 +51,20 @@
     }
 
     .hero__window .mac-win__body {
-        padding: var(--space-sm);
+        padding: var(--space-xs) var(--space-sm);
     }
 
     .hero__inner {
         flex-direction: column;
         justify-content: center;
-        text-align: center;
+        text-align: left;
         gap: var(--space-md);
     }
 
     .hero__text {
         flex: unset;
         max-width: 100%;
-        align-items: center;
+        align-items: flex-start;
     }
 
     .hero__title {
@@ -72,9 +72,14 @@
     }
 
     .hero__icons {
-        justify-content: center;
-        gap: var(--space-md);
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+
+    .hero__icon {
+        flex-direction: row;
+        gap: 10px;
     }
 
     .hero__icon-svg {
@@ -98,8 +103,8 @@
         position: fixed;
         bottom: 0;
         right: -5px;
-        width: 55vw;
-        height: 60vh;
+        width: 41vw;
+        height: 45vh;
         z-index: 10;
         pointer-events: none;
     }
