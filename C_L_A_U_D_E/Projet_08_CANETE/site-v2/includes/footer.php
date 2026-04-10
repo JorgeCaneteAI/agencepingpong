@@ -2,6 +2,7 @@
 
 <!-- Phylactère portrait -->
 <div id="speech-bubble" class="speech-bubble" aria-hidden="true">
+    <button class="speech-bubble__close" id="speech-bubble-close" aria-label="Fermer">✕</button>
     <p class="speech-bubble__text">Alors ?<br>On se fait une partie ?</p>
 </div>
 
@@ -21,7 +22,7 @@
             </svg>
         </span>
         <p class="site-footer__copy">
-            &copy; <?= date('Y') ?> Agence Ping Pong. Tous droits réservés.
+            &copy; <?= date('Y') ?> Agence Ping Pong : <a href="https://www.anthropic.com/claude-code" class="site-footer__link" target="_blank" rel="noopener">Claude Code</a> et Jorge
         </p>
     </div>
 </footer>

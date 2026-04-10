@@ -187,11 +187,14 @@
     speechBubble.style.bottom = (window.innerHeight - rect.top + 16) + 'px';
   }
 
+  var bubbleDismissed = false;
+
   if (speechBubble && typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.create({
-      trigger: '#contact',
+      trigger: '#pong-game',
       start: 'top 80%',
       onEnter: function () {
+        if (bubbleDismissed) return;
         positionSpeechBubble();
         speechBubble.classList.add('speech-bubble--visible');
       },
@@ -199,11 +202,19 @@
         speechBubble.classList.remove('speech-bubble--visible');
       },
       onUpdate: function () {
-        if (speechBubble.classList.contains('speech-bubble--visible')) {
+        if (!bubbleDismissed && speechBubble.classList.contains('speech-bubble--visible')) {
           positionSpeechBubble();
         }
       }
     });
+
+    var closeBtn = document.getElementById('speech-bubble-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        speechBubble.classList.remove('speech-bubble--visible');
+        bubbleDismissed = true;
+      });
+    }
   }
 
   /* ------------------------------------------------------------------ */

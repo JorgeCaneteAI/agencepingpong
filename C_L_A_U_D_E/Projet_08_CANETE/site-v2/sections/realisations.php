@@ -1,13 +1,27 @@
 <section id="realisations" class="section section--dark realisations">
 
-    <!-- Background table lines -->
-    <div class="realisations__bg" aria-hidden="true">
-        <?php include __DIR__ . '/../assets/svg/game/table-lines.svg'; ?>
-    </div>
+    <!-- Diagonal banner -->
+    <div class="realisations__banner" aria-hidden="true"></div>
 
     <div class="o-container">
 
-        <h2 class="realisations__title" data-animate="split-reveal">Les Échanges</h2>
+        <h2 class="section__title" data-animate="split-reveal">Les Échanges.</h2>
+        <div class="section__marquee section__marquee--light" aria-hidden="true">
+            <div class="section__marquee-track">
+                <span>Projets à venir · On cherche des partenaires</span>
+                <span>·</span>
+                <span>Propose ton savoir-faire · On échange à valeur égale</span>
+                <span>·</span>
+                <span>Projets à venir · On cherche des partenaires</span>
+                <span>·</span>
+                <span>Propose ton savoir-faire · On échange à valeur égale</span>
+                <span>·</span>
+                <span>Projets à venir · On cherche des partenaires</span>
+                <span>·</span>
+                <span>Propose ton savoir-faire · On échange à valeur égale</span>
+                <span>·</span>
+            </div>
+        </div>
 
         <!-- Web category -->
         <div class="realisations__category realisations__category--web">
@@ -72,76 +86,6 @@
                         <div class="card__body">
                             <p class="card__type">Print</p>
                             <h4 class="card__title">Flyer association sportive</h4>
-                        </div>
-                    </article>
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Print</p>
-                            <h4 class="card__title">Bientôt</h4>
-                        </div>
-                    </article>
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Print</p>
-                            <h4 class="card__title">Bientôt</h4>
-                        </div>
-                    </article>
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Print</p>
-                            <h4 class="card__title">Bientôt</h4>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Identity category -->
-        <div class="realisations__category realisations__category--identity">
-            <h3 class="realisations__cat-title">Identité visuelle</h3>
-            <div class="realisations__carousel">
-                <div class="realisations__track">
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Identité</p>
-                            <h4 class="card__title">Bientôt</h4>
-                        </div>
-                    </article>
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Identité</p>
-                            <h4 class="card__title">Bientôt</h4>
-                        </div>
-                    </article>
-
-                    <article class="realisations__card">
-                        <div class="card__img card__img--soon">
-                            <span>Bientôt</span>
-                        </div>
-                        <div class="card__body">
-                            <p class="card__type">Identité</p>
-                            <h4 class="card__title">Bientôt</h4>
                         </div>
                     </article>
 

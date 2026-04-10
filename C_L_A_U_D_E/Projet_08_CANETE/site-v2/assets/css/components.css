@@ -434,6 +434,24 @@
     z-index: 1;
 }
 
+.speech-bubble__close {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    background: none;
+    border: none;
+    font-size: 0.7rem;
+    color: var(--color-navy);
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+.speech-bubble__close:hover {
+    opacity: 1;
+}
+
 .speech-bubble__text {
     font-family: var(--font-display);
     font-size: clamp(1rem, 1.5vw, 1.25rem);

@@ -6,6 +6,30 @@
             Pas de devis.<br>Un échange.
         </h2>
 
+        <!-- Scrolling marquee -->
+        <div class="concept__marquee" aria-hidden="true">
+            <div class="concept__marquee-track">
+                <span>Pas de facture. Juste un échange.</span>
+                <span>·</span>
+                <span>Tu donnes ce que tu sais faire.</span>
+                <span>·</span>
+                <span>On crée ta com'.</span>
+                <span>·</span>
+                <span>Pas de facture. Juste un échange.</span>
+                <span>·</span>
+                <span>Tu donnes ce que tu sais faire.</span>
+                <span>·</span>
+                <span>On crée ta com'.</span>
+                <span>·</span>
+                <span>Pas de facture. Juste un échange.</span>
+                <span>·</span>
+                <span>Tu donnes ce que tu sais faire.</span>
+                <span>·</span>
+                <span>On crée ta com'.</span>
+                <span>·</span>
+            </div>
+        </div>
+
         <!-- Mac OS 8 App Window — VirusBarrier style -->
         <div class="concept__app mac-win">
             <div class="mac-win__titlebar">

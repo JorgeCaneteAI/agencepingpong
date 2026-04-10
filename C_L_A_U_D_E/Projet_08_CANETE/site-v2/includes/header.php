@@ -186,23 +186,40 @@ $csrfToken = generateCsrfToken();
 
 <!-- Fullscreen navigation menu -->
 <nav id="fullscreen-menu" class="fullscreen-menu" aria-hidden="true" aria-label="Navigation principale">
-    <ul class="fullscreen-menu__list">
-        <li class="fullscreen-menu__item">
-            <a href="#hero" class="fullscreen-menu__link">Le Service</a>
-        </li>
-        <li class="fullscreen-menu__item">
-            <a href="#concept" class="fullscreen-menu__link">L'Échange</a>
-        </li>
-        <li class="fullscreen-menu__item">
-            <a href="#services" class="fullscreen-menu__link">Les Coups</a>
-        </li>
-        <li class="fullscreen-menu__item">
-            <a href="#realisations" class="fullscreen-menu__link">Les Échanges</a>
-        </li>
-        <li class="fullscreen-menu__item">
-            <a href="#contact" class="fullscreen-menu__link">À ton tour</a>
-        </li>
-    </ul>
+    <div class="fullscreen-menu__window">
+        <div class="fullscreen-menu__titlebar">
+            <span class="fullscreen-menu__titlebar-btn"></span>
+            <span class="fullscreen-menu__titlebar-btn"></span>
+            <span class="fullscreen-menu__titlebar-btn"></span>
+            <span class="fullscreen-menu__titlebar-title">Navigation</span>
+        </div>
+        <ul class="fullscreen-menu__list">
+            <li class="fullscreen-menu__item">
+                <span class="fullscreen-menu__num">01</span>
+                <a href="#hero" class="fullscreen-menu__link">Le Service</a>
+            </li>
+            <li class="fullscreen-menu__item">
+                <span class="fullscreen-menu__num">02</span>
+                <a href="#concept" class="fullscreen-menu__link">L'Échange</a>
+            </li>
+            <li class="fullscreen-menu__item">
+                <span class="fullscreen-menu__num">03</span>
+                <a href="#services" class="fullscreen-menu__link">Les Coups</a>
+            </li>
+            <li class="fullscreen-menu__item">
+                <span class="fullscreen-menu__num">04</span>
+                <a href="#realisations" class="fullscreen-menu__link">Les Échanges</a>
+            </li>
+            <li class="fullscreen-menu__item">
+                <span class="fullscreen-menu__num">05</span>
+                <a href="#contact" class="fullscreen-menu__link">À ton tour</a>
+            </li>
+        </ul>
+    </div>
+    <div class="fullscreen-menu__footer">
+        <span>bonjour@agencepingpong.fr</span>
+        <span>07 67 78 37 73</span>
+    </div>
 </nav>
 
 <main id="site-content" class="site-content">

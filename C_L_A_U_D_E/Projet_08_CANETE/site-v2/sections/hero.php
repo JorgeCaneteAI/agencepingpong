@@ -1,4 +1,4 @@
-<section id="hero" class="section section--fullscreen hero">
+<section id="hero" class="section hero">
     <div class="o-container">
 
         <!-- Mac OS 8 Window wrapping the entire hero -->
@@ -32,6 +32,11 @@
                                     <rect x="12" y="7" width="8" height="2" rx="0.5" fill="#FFFFFF" opacity="0.6"/>
                                 </svg>
                                 <span class="hero__icon-label">Découvrir l'échange</span>
+                                <span class="hero__cursor" aria-hidden="true">
+                                    <svg viewBox="0 0 16 22" width="28" height="38" fill="none">
+                                        <path d="M1 1l0 15 4-4 3 6 2-1-3-6h5z" fill="#fff" stroke="#1B2A4A" stroke-width="1.2" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
                             </a>
                             <a href="#realisations" class="hero__icon">
                                 <svg class="hero__icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">

@@ -8,8 +8,21 @@
     /* ---- Token overrides ---- */
 
     :root {
-        --container-padding: 1.25rem;
+        --container-padding: 1rem;
         --ball-size: 18px;
+        --space-xl: 3rem;
+        --space-lg: 2rem;
+        --space-md: 1.25rem;
+    }
+
+    /* ---- Mac Window — global mobile fixes ---- */
+
+    .mac-win {
+        box-shadow: 2px 2px 0 rgba(27, 42, 74, 0.25);
+    }
+
+    .mac-win__body {
+        padding: var(--space-sm);
     }
 
     /* ---- NAV ---- */
@@ -18,13 +31,34 @@
         display: none;
     }
 
+    .site-header__logo {
+        display: none;
+    }
+
+    .site-header__inner {
+        justify-content: flex-end;
+    }
+
+    .burger-btn {
+        display: flex;
+    }
+
     /* ---- HERO ---- */
+
+    .hero__window {
+        margin-top: calc(var(--space-sm) + 40px);
+        margin-bottom: var(--space-sm);
+    }
+
+    .hero__window .mac-win__body {
+        padding: var(--space-sm);
+    }
 
     .hero__inner {
         flex-direction: column;
         justify-content: center;
         text-align: center;
-        padding-block: var(--space-lg);
+        gap: var(--space-md);
     }
 
     .hero__text {
@@ -33,28 +67,164 @@
         align-items: center;
     }
 
+    .hero__title {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .hero__icons {
+        justify-content: center;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+    }
+
+    .hero__icon-svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .hero__icon-label {
+        font-size: 0.65rem;
+    }
+
+    .hero__icon::after {
+        display: none;
+    }
+
+    .hero__subtitle {
+        font-size: 0.85rem;
+    }
+
     .hero__portrait {
-        order: 2;
-        flex: unset;
+        position: fixed;
+        bottom: 0;
+        right: -5px;
+        width: 55vw;
+        height: 60vh;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .hero__cursor {
+        display: none;
+    }
+
+    /* ---- SECTION TITLES & MARQUEES ---- */
+
+    .section__title {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+    }
+
+    .section__marquee {
+        margin-bottom: var(--space-sm);
+    }
+
+    /* ---- CONCEPT ---- */
+
+    .concept__app-body {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .concept__sidebar {
         width: 100%;
-        height: 300px;
-        max-height: 50vw;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 2px solid var(--color-navy);
+        padding: 8px;
+    }
+
+    .concept__sidebar-btn {
+        width: auto;
+        padding: 6px 8px;
+    }
+
+    .concept__sidebar-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .concept__sidebar-btn span {
+        font-size: 0.5rem;
+    }
+
+    .concept__log-header {
+        padding: 4px 10px;
+    }
+
+    .concept__log-header span {
+        font-size: 0.55rem;
+    }
+
+    .concept__log-scroll {
+        max-height: 300px;
+    }
+
+    .concept__accordion-btn {
+        font-size: 0.65rem;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .concept__accordion-body.is-visible {
+        padding: 0 10px 8px 20px;
+    }
+
+    .concept__accordion-body p {
+        font-size: 0.65rem;
+    }
+
+    .concept__log-footer {
+        font-size: 0.55rem;
+        padding: 6px 10px;
+    }
+
+    .concept__cta {
+        font-size: 0.8rem;
     }
 
     /* ---- SERVICES ---- */
 
-    .services__block-inner {
-        flex-direction: column !important;
-        text-align: center;
-        gap: var(--space-md);
+    .chooser__body {
+        grid-template-columns: 1fr;
+        min-height: auto;
     }
 
-    .services__block--right .services__block-inner {
-        text-align: center;
+    .chooser__icons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 2px solid var(--color-navy);
+        padding: 10px;
     }
 
-    .services__body {
-        align-items: center;
+    .chooser__icon-btn {
+        padding: 6px;
+    }
+
+    .chooser__icon-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .chooser__icon-img svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .chooser__icon-label {
+        font-size: 0.6rem;
+    }
+
+    .chooser__list {
+        border-right: none;
+        border-bottom: 2px solid var(--color-navy);
+    }
+
+    .chooser__preview {
+        padding: 12px;
     }
 
     /* ---- RÉALISATIONS ---- */
@@ -73,6 +243,30 @@
 
     /* ---- CONTACT ---- */
 
+    .contact-win__toolbar {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .contact-win__toolbar-btn {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+    }
+
+    .contact-win__field-row--double {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .contact-win__header-label {
+        font-size: 0.65rem;
+        min-width: 30px;
+    }
+
+    .contact-win__textarea {
+        min-height: 100px;
+    }
+
     .contact__tap-btn {
         display: inline-flex;
     }
@@ -81,6 +275,78 @@
         align-self: stretch;
         width: 100%;
         justify-content: center;
+    }
+
+    /* ---- PONG ---- */
+
+    .pong-rotate-hint {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--color-cream);
+        border: 2px solid var(--color-navy);
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        font-family: 'ChicagoFLF', 'Geneva', sans-serif;
+        font-size: 0.7rem;
+        color: var(--color-navy);
+        text-align: left;
+    }
+
+    .pong-section {
+        padding: var(--space-lg) var(--container-padding);
+    }
+
+    .pong-body {
+        padding: var(--space-sm);
+    }
+
+    .pong-menubar {
+        font-size: 0.6rem;
+    }
+
+    .pong-section__controls {
+        font-size: 0.6rem;
+    }
+
+    .pong-section__controls kbd {
+        font-size: 0.55rem;
+        padding: 1px 4px;
+    }
+
+    /* ---- SPEECH BUBBLE ---- */
+
+    .speech-bubble {
+        width: 140px;
+        padding: 0.5rem 0.75rem;
+        box-shadow: 2px 2px 0 var(--color-navy);
+    }
+
+    .speech-bubble__text {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+
+    .speech-bubble::after {
+        bottom: -10px;
+        right: 14px;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 10px solid var(--color-navy);
+    }
+
+    .speech-bubble::before {
+        bottom: -7px;
+        right: 16px;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 8px solid var(--color-white);
+    }
+
+    /* ---- FOOTER ---- */
+
+    .site-footer__copy {
+        font-size: 0.65rem;
     }
 
     /* ---- FULLSCREEN MENU ---- */
