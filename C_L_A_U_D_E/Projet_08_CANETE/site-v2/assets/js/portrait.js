@@ -138,12 +138,17 @@
   /* ------------------------------------------------------------------ */
   function startMobileIdle() {
     if (typeof gsap === 'undefined') return;
-    gsap.to(container, {
+    var idleObj = { y: 0 };
+    gsap.to(idleObj, {
       y: 8,
       duration: 3,
       ease: 'sine.inOut',
       yoyo: true,
-      repeat: -1
+      repeat: -1,
+      onUpdate: function () {
+        var s = window.__portraitScale || 1;
+        container.style.transform = 'translateY(' + idleObj.y + 'px) scale(' + s + ')';
+      }
     });
   }
 
@@ -154,18 +159,34 @@
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.fromTo(container, {
-      scale: 1
-    }, {
-      scale: 0.4,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1
+    var minScale = window.innerWidth < 768 ? 0.3 : 0.4;
+
+    if (isMobile) {
+      // Mobile: store scroll scale, combine with idle animation
+      window.__portraitScale = 1;
+      function onScroll() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (maxScroll <= 0) return;
+        var progress = Math.min(scrollTop / maxScroll, 1);
+        window.__portraitScale = 1 - progress * (1 - minScale);
       }
-    });
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    } else {
+      gsap.fromTo(container, {
+        scale: 1
+      }, {
+        scale: minScale,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#site-content',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.5
+        }
+      });
+    }
   }
 
   if (!prefersReducedMotion) {
