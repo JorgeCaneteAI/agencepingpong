@@ -1,0 +1,28 @@
+# Dossiers personnels — jamais dans ce repo
+C_L_A_U_D_E/Projet_01_*/
+C_L_A_U_D_E/Projet_02_*/
+C_L_A_U_D_E/Projet_03_*/
+C_L_A_U_D_E/Projet_04_*/
+C_L_A_U_D_E/Projet_05_*/
+C_L_A_U_D_E/Projet_06_*/
+C_L_A_U_D_E/Projet_07_*/
+C_L_A_U_D_E/Projet_09_*/
+C_L_A_U_D_E/Projet_10_*/
+Application Villa Plaisance/
+DYMO Label Software/
+NON CLAUDE/
+Adobe/
+.Cloud/
+
+# macOS
+.DS_Store
+.localized
+.BridgeSort
+
+# Documents personnels
+*.pdf
+*.plist
+
+# Variables d'environnement
+.env
+*.env
