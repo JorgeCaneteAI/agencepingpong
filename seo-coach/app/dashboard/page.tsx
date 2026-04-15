@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 
-const LEVEL_TITLES: Record<number, string> = {
+const LEVEL_TITLES: Partial<Record<number, string>> = {
   1: "Les fondations",
   2: "Les mots-clés",
   3: "Le contenu",
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
               <h2 className="font-semibold truncate">{project.name}</h2>
               <p className="text-sm text-gray-400 truncate">{project.url}</p>
               <p className="text-xs text-blue-600 mt-0.5">
-                Niveau {project.currentLevel} — {LEVEL_TITLES[project.currentLevel]}
+                Niveau {project.currentLevel} — {LEVEL_TITLES[project.currentLevel] ?? "..."}
               </p>
             </div>
 
