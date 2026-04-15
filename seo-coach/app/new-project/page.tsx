@@ -11,7 +11,7 @@ interface FormData {
   geoZone: string;
 }
 
-type Step = "questions" | "diagnostic" | "done";
+type Step = "questions" | "diagnostic";
 
 interface DiagnosticResult {
   projectId: string;

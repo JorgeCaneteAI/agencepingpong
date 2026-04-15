@@ -6,7 +6,7 @@ const LEVEL_TITLES: Partial<Record<number, string>> = {
   2: "Les mots-clés",
   3: "Le contenu",
   4: "L'autorité",
-  5: "GSO",
+  5: "Présence IA (GSO)",
 };
 
 function ScoreBadge({ score }: { score: number }) {
