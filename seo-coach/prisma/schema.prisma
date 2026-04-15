@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Project {
+  id                String   @id @default(cuid())
+  url               String
+  name              String
+  objective         String   @default("")
+  theme             String   @default("")
+  geoZone           String   @default("")
+  initialDiagnostic String   @default("{}") // JSON string
+  score             Int      @default(0)
+  currentLevel      Int      @default(1)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  audits            Audit[]
+  tasks             Task[]
+  keywords          Keyword[]
+  competitors       Competitor[]
+}
+
+model Audit {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date            DateTime @default(now())
+  scoreBreakdown  String   @default("{}") // JSON: { level1: 15, level2: 8, ... }
+  technicalChecks String   @default("{}") // JSON: résultats crawl
+  contentAnalysis String   @default("{}") // JSON: analyse contenu
+  gsoAnalysis     String   @default("{}") // JSON: visibilité IA
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String    @default("")
+  level       Int       // 1-5
+  impact      String    @default("medium") // high, medium, low
+  difficulty  String    @default("medium") // easy, medium, hard
+  status      String    @default("pending") // pending, done, skipped
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model Keyword {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  term        String
+  volume      Int?
+  position    Int?
+  lastChecked DateTime @default(now())
+}
+
+model Competitor {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url          String
+  name         String   @default("")
+  lastAnalyzed DateTime @default(now())
+}
