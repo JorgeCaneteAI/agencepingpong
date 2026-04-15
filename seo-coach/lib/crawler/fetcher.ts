@@ -24,7 +24,7 @@ export async function fetchPage(
 
     const html = await response.text();
     const responseTimeMs = Date.now() - start;
-    const isHttps = new URL(url).protocol === "https:";
+    const isHttps = new URL(response.url).protocol === "https:";
 
     return {
       html,
