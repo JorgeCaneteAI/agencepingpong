@@ -18,7 +18,7 @@ interface DiagnosticResult {
   score: number;
   tasksGenerated: number;
   crawlOk: boolean;
-  title: string | null;
+  titlePresent: boolean;
   metaDescription: string | null;
   isHttps: boolean;
   hasSitemap: boolean;
@@ -68,6 +68,10 @@ export default function NewProjectPage() {
 
       const crawlData = await crawlRes.json();
 
+      if (!crawlRes.ok) {
+        throw new Error("L'analyse du site a échoué. Réessaie dans quelques instants.");
+      }
+
       // Step 3: Parse diagnostic
       const checks = crawlData.audit?.checks ?? [];
       const titleCheck = checks.find((c: { id: string }) => c.id === "title");
@@ -89,7 +93,7 @@ export default function NewProjectPage() {
         score: crawlData.score ?? 0,
         tasksGenerated: crawlData.tasksGenerated ?? 0,
         crawlOk: crawlData.score !== undefined,
-        title: titleCheck ? titleCheck.details.replace(/^Ton titre fait.*$/, "").trim() || null : null,
+        titlePresent: titleCheck?.passed ?? false,
         metaDescription: descCheck ? (descCheck.passed ? "Présente" : "Absente") : "Non vérifiée",
         isHttps: httpsCheck?.passed ?? false,
         hasSitemap: sitemapCheck?.passed ?? false,
@@ -248,7 +252,7 @@ export default function NewProjectPage() {
             </div>
             <div className="px-4 py-3 grid grid-cols-2 gap-4 text-sm">
               <span className="text-gray-600">Secteur : {formData.theme || "—"}</span>
-              <span>{diagnostic.title ? `Titre : "${diagnostic.title.slice(0, 40)}${diagnostic.title.length > 40 ? "…" : ""}"` : "❌ Pas de titre"}</span>
+              <span>{diagnostic.titlePresent ? "✅ Titre présent" : "❌ Pas de titre"}</span>
             </div>
             <div className="px-4 py-3 grid grid-cols-2 gap-4 text-sm">
               <span className="text-gray-600">Zone : {formData.geoZone || "—"}</span>
