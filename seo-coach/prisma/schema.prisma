@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Project {
@@ -14,7 +14,7 @@ model Project {
   objective         String   @default("")
   theme             String   @default("")
   geoZone           String   @default("")
-  initialDiagnostic String   @default("{}") // JSON string
+  initialDiagnostic String   @default("{}")
   score             Int      @default(0)
   currentLevel      Int      @default(1)
   createdAt         DateTime @default(now())
@@ -30,10 +30,10 @@ model Audit {
   projectId       String
   project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   date            DateTime @default(now())
-  scoreBreakdown  String   @default("{}") // JSON: { level1: 15, level2: 8, ... }
-  technicalChecks String   @default("{}") // JSON: résultats crawl
-  contentAnalysis String   @default("{}") // JSON: analyse contenu
-  gsoAnalysis     String   @default("{}") // JSON: visibilité IA
+  scoreBreakdown  String   @default("{}")
+  technicalChecks String   @default("{}")
+  contentAnalysis String   @default("{}")
+  gsoAnalysis     String   @default("{}")
 }
 
 model Task {
@@ -42,10 +42,10 @@ model Task {
   project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   title       String
   description String    @default("")
-  level       Int       // 1-5
-  impact      String    @default("medium") // high, medium, low
-  difficulty  String    @default("medium") // easy, medium, hard
-  status      String    @default("pending") // pending, done, skipped
+  level       Int
+  impact      String    @default("medium")
+  difficulty  String    @default("medium")
+  status      String    @default("pending")
   completedAt DateTime?
   createdAt   DateTime  @default(now())
 }
