@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 export async function GET(
@@ -27,18 +28,33 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const body = await request.json();
-  const { name, objective, theme, geoZone } = body;
 
-  const project = await prisma.project.update({
-    where: { id },
-    data: {
-      ...(name !== undefined && { name }),
-      ...(objective !== undefined && { objective }),
-      ...(theme !== undefined && { theme }),
-      ...(geoZone !== undefined && { geoZone }),
-    },
-  });
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+  }
+  const { name, objective, theme, geoZone } = body as Record<string, string | undefined>;
 
-  return NextResponse.json(project);
+  const data = {
+    ...(name !== undefined && { name }),
+    ...(objective !== undefined && { objective }),
+    ...(theme !== undefined && { theme }),
+    ...(geoZone !== undefined && { geoZone }),
+  };
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: "Aucun champ à mettre à jour" }, { status: 400 });
+  }
+
+  try {
+    const project = await prisma.project.update({ where: { id }, data });
+    return NextResponse.json(project);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      return NextResponse.json({ error: "Ressource non trouvée" }, { status: 404 });
+    }
+    throw e;
+  }
 }
