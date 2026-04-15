@@ -155,6 +155,10 @@ User (V2+, ignoré en V1)
 Project
 ├── url: string (URL du site)
 ├── name: string
+├── objective: string (objectif de l'utilisateur)
+├── theme: string (thématique / secteur)
+├── geoZone: string (zone géographique cible)
+├── initialDiagnostic: json (confrontation intention vs réalité Google)
 ├── score: number (0-100)
 ├── currentLevel: number (1-5)
 ├── createdAt: datetime
@@ -194,16 +198,40 @@ Project
 
 ### 5.1 Dashboard (accueil)
 
-- Liste des projets (4 sites en V1)
+- Liste de tous les projets (nombre illimité)
+- Navigation fluide d'un projet à l'autre (sélecteur dans la sidebar ou header)
 - Pour chaque projet : score global, niveau actuel, date dernière analyse, nombre d'actions en attente
 - Bouton "Analyser" pour relancer un scan
 - Bouton "Ajouter un site"
 
-### 5.2 Ajout de projet
+### 5.2 Ajout de projet — Onboarding en 3 étapes
 
-- Champ URL + nom du site
-- Lancement automatique du premier crawl
-- Redirection vers la vue projet après analyse
+**Étape 1 — Questions simples (formulaire)**
+
+- Adresse du site (URL)
+- Nom du site / de l'entreprise
+- Objectif principal : "Qu'est-ce que tu veux que les gens fassent sur ton site ?" (acheter, réserver, contacter, s'informer...)
+- Thématique / secteur d'activité : "De quoi parle ton site ?" (restaurant, artisan, boutique, blog...)
+- Zone géographique : "Tu vises des clients où ?" (ville, région, France entière, international)
+
+**Étape 2 — Premier diagnostic automatique**
+
+L'outil crawle le site et interroge Google pour produire un rapport de confrontation :
+
+| Ce que tu veux | Ce que Google voit |
+|---|---|
+| "Je suis un traiteur mariage à Nîmes" | Google dit : "site de restauration, pas de mention mariage, localisation floue" |
+| "Je veux que les gens réservent" | Pas de page de réservation détectée, pas de CTA clair |
+| "Ma zone c'est le Gard" | Aucune donnée locale (pas de fiche Google Business, pas d'adresse sur le site) |
+
+Ce diagnostic visuel montre immédiatement le **décalage entre l'intention et la réalité**. C'est le moment "ah ouais quand même" qui motive l'utilisateur.
+
+**Étape 3 — Score initial + lancement du programme**
+
+- Score initial calculé (ex: 23/100)
+- Message encourageant : "Ton site a du potentiel, voici par où commencer"
+- Génération automatique du plan d'action personnalisé
+- Redirection vers la vue projet
 
 ### 5.3 Vue projet (écran principal)
 
@@ -257,7 +285,7 @@ Fonctions spéciales :
 
 ### Inclus
 
-- 4 projets pré-configurés (les sites de test)
+- Nombre de projets illimité (navigation inter-projets)
 - Crawler maison complet (audit technique)
 - Intégration PageSpeed API (Core Web Vitals)
 - Score global + score par niveau
