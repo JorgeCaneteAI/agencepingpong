@@ -141,9 +141,9 @@ export default async function PlanPage({
           </h2>
           <div className="space-y-2 opacity-60">
             {done.map((task) => (
-              <div key={task.id} className="flex gap-3 p-4 border rounded-xl line-through">
+              <div key={task.id} className="flex gap-3 p-4 border rounded-xl">
                 <TaskCheckbox taskId={task.id} initialStatus={task.status} />
-                <p className="font-medium text-gray-400">{task.title}</p>
+                <p className="font-medium text-gray-400 line-through">{task.title}</p>
               </div>
             ))}
           </div>

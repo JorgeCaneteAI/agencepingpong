@@ -17,16 +17,20 @@ export default function TaskCheckbox({
   async function toggle() {
     setLoading(true);
     const newStatus = done ? "pending" : "done";
-
-    await fetch(`/api/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
-    });
-
-    setDone(!done);
-    setLoading(false);
-    router.refresh();
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) return;
+      setDone(!done);
+      router.refresh();
+    } catch {
+      // network failure — do not update local state
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
