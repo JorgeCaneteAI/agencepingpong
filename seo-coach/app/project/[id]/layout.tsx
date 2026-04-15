@@ -14,9 +14,9 @@ function ScoreRing({ score }: { score: number }) {
   const color =
     score >= 70 ? "text-green-600" : score >= 40 ? "text-orange-500" : "text-red-500";
   return (
-    <div className="text-center py-4">
-      <span className={`text-4xl font-bold ${color}`}>{score}</span>
-      <span className="text-gray-400 text-lg">/100</span>
+    <div className="text-center py-4" aria-label={`Score SEO : ${score} sur 100`}>
+      <span aria-hidden="true" className={`text-4xl font-bold ${color}`}>{score}</span>
+      <span aria-hidden="true" className="text-gray-400 text-lg">/100</span>
     </div>
   );
 }
@@ -79,7 +79,11 @@ export default async function ProjectLayout({
                     <span>{level.title}</span>
                   </Link>
                 ) : (
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-300 cursor-not-allowed">
+                  <div
+                  aria-disabled="true"
+                  aria-label={`Niveau ${level.num} — ${level.title} (verrouillé)`}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-300 cursor-not-allowed"
+                >
                     <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-300 text-xs flex items-center justify-center font-bold">
                       {level.num}
                     </span>
@@ -101,7 +105,7 @@ export default async function ProjectLayout({
             </Link>
           </div>
 
-          <div className="opacity-40 cursor-not-allowed">
+          <div aria-hidden="true" className="opacity-40 cursor-not-allowed">
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm">
               <span>🤖</span>
               <span>Coach IA</span>
