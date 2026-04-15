@@ -40,6 +40,15 @@ function ScoreBar({ score, maxScore }: { score: number; maxScore: number }) {
   );
 }
 
+function parseChecks(raw: string): Check[] {
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as Check[]) : [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function LevelPage({
   params,
 }: {
@@ -60,9 +69,7 @@ export default async function LevelPage({
   if (!project) notFound();
 
   const lastAudit = project.audits[0];
-  const allChecks: Check[] = lastAudit
-    ? JSON.parse(lastAudit.technicalChecks)
-    : [];
+  const allChecks = lastAudit ? parseChecks(lastAudit.technicalChecks) : [];
 
   const checks = allChecks.filter((c) => c.level === levelNum);
   const levelScore = checks.reduce((sum, c) => sum + c.score, 0);
