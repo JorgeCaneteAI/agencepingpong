@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { notFound } from "next/navigation";
+import Link from "next/link";
 import CrawlButton from "./CrawlButton";
 
 export default async function ProjectPage({
@@ -14,70 +14,61 @@ export default async function ProjectPage({
     where: { id },
     include: {
       audits: { orderBy: { date: "desc" }, take: 1 },
-      tasks: { where: { status: "pending" }, orderBy: { impact: "asc" } },
+      tasks: { where: { status: "pending" } },
     },
   });
 
   if (!project) notFound();
 
   const lastAudit = project.audits[0];
-  const checks = lastAudit
-    ? JSON.parse(lastAudit.technicalChecks)
-    : [];
 
   return (
-    <main className="max-w-4xl mx-auto p-8">
-      <Link href="/dashboard" className="text-blue-600 hover:underline text-sm">
-        &larr; Retour au dashboard
-      </Link>
-
-      <div className="mt-4 mb-8">
+    <main className="p-8 max-w-2xl">
+      <div className="mb-8">
         <h1 className="text-2xl font-bold">{project.name}</h1>
-        <p className="text-gray-500">{project.url}</p>
-        <p className="text-3xl font-bold mt-2">
-          Score : <span className={project.score >= 70 ? "text-green-600" : project.score >= 40 ? "text-orange-500" : "text-red-500"}>{project.score}</span>/100
-        </p>
+        <p className="text-gray-500 text-sm">{project.url}</p>
       </div>
 
-      <CrawlButton projectId={project.id} />
-
-      {checks.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Niveau 1 — Les fondations</h2>
-          <div className="space-y-2">
-            {checks.map((check: { id: string; label: string; passed: boolean; score: number; maxScore: number; details: string; fix?: string }) => (
-              <div
-                key={check.id}
-                className={`p-3 rounded-lg border ${check.passed ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}
-              >
-                <div className="flex items-center gap-2">
-                  <span>{check.passed ? "✅" : "❌"}</span>
-                  <span className="font-medium">{check.label}</span>
-                  <span className="text-sm text-gray-500 ml-auto">{check.score}/{check.maxScore}</span>
-                </div>
-                <p className="text-sm text-gray-600 mt-1">{check.details}</p>
-                {check.fix && (
-                  <p className="text-sm text-blue-700 mt-1">💡 {check.fix}</p>
-                )}
-              </div>
-            ))}
-          </div>
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="border rounded-lg p-4 text-center">
+          <p className="text-3xl font-bold text-blue-600">{project.score}</p>
+          <p className="text-xs text-gray-500 mt-1">Score global</p>
         </div>
-      )}
-
-      {project.tasks.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Plan d'action</h2>
-          <div className="space-y-2">
-            {project.tasks.map((task) => (
-              <div key={task.id} className="p-3 border rounded-lg">
-                <p className="font-medium">{task.title}</p>
-                <p className="text-sm text-gray-600 mt-1 whitespace-pre-line">{task.description}</p>
-              </div>
-            ))}
-          </div>
+        <div className="border rounded-lg p-4 text-center">
+          <p className="text-3xl font-bold">{project.tasks.length}</p>
+          <p className="text-xs text-gray-500 mt-1">Actions en attente</p>
         </div>
-      )}
+        <div className="border rounded-lg p-4 text-center">
+          <p className="text-3xl font-bold">Niv. {project.currentLevel}</p>
+          <p className="text-xs text-gray-500 mt-1">Niveau actuel</p>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <CrawlButton projectId={project.id} />
+        {lastAudit && (
+          <p className="text-xs text-gray-400 mt-2">
+            Dernier audit : {new Date(lastAudit.date).toLocaleDateString("fr-FR")}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Link
+          href={`/project/${id}/level/1`}
+          className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <span className="font-medium">Niveau 1 — Les fondations</span>
+          <span className="text-gray-400">→</span>
+        </Link>
+        <Link
+          href={`/project/${id}/plan`}
+          className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <span className="font-medium">📋 Plan d'action ({project.tasks.length} actions)</span>
+          <span className="text-gray-400">→</span>
+        </Link>
+      </div>
     </main>
   );
 }
