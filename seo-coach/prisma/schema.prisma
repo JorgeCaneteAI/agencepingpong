@@ -9,7 +9,7 @@ datasource db {
 
 model Project {
   id                String   @id @default(cuid())
-  url               String
+  url               String  @unique
   name              String
   objective         String   @default("")
   theme             String   @default("")
