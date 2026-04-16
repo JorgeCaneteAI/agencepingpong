@@ -105,13 +105,13 @@ export default async function ProjectLayout({
             </Link>
           </div>
 
-          <div aria-hidden="true" className="opacity-40 cursor-not-allowed">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm">
-              <span>🤖</span>
-              <span>Coach IA</span>
-              <span className="ml-auto text-xs bg-gray-200 px-1.5 py-0.5 rounded">Bientôt</span>
-            </div>
-          </div>
+          <Link
+            href={`/project/${id}/coach`}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-white hover:shadow-sm transition-all"
+          >
+            <span>🤖</span>
+            <span>Coach IA</span>
+          </Link>
         </nav>
       </aside>
 
