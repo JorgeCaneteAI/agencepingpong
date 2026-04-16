@@ -21,9 +21,17 @@ function parseChecks(raw: string): CheckResult[] {
   }
 }
 
+let _formation: string | null = null;
+
 export function loadFormation(): string {
+  if (_formation) return _formation;
   const filePath = path.join(process.cwd(), "lib/knowledge/formation.md");
-  return fs.readFileSync(filePath, "utf-8");
+  try {
+    _formation = fs.readFileSync(filePath, "utf-8");
+    return _formation;
+  } catch {
+    throw new Error(`Formation introuvable : ${filePath}. Vérifier le déploiement.`);
+  }
 }
 
 export function buildSystemPrompt(

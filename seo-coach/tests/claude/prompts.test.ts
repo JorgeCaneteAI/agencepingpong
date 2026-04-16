@@ -72,7 +72,8 @@ describe("buildSystemPrompt", () => {
 
   it("contient le contenu de la base de connaissances", () => {
     const result = buildSystemPrompt(fakeProject, null, []);
-    expect(result).toContain("##");
+    // "Principe fondamental" est un titre de section propre à la formation SEO/GSO
+    expect(result).toContain("Principe fondamental");
   });
 
   it("inclut les tâches en attente si présentes", () => {
