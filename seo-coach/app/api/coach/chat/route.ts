@@ -41,15 +41,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Projet non trouvé" }, { status: 404 });
   }
 
-  const systemPrompt = buildSystemPrompt(
-    project,
-    project.audits[0] ?? null,
-    project.tasks
-  );
-
   const messages: Message[] = [...history, { role: "user", content: message }];
 
   try {
+    const systemPrompt = buildSystemPrompt(
+      project,
+      project.audits[0] ?? null,
+      project.tasks
+    );
+
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1024,
@@ -57,8 +57,8 @@ export async function POST(request: Request) {
       messages,
     });
 
-    const reply =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const firstBlock = response.content[0];
+    const reply = firstBlock?.type === "text" ? firstBlock.text : "";
 
     return NextResponse.json({ reply });
   } catch (error) {
